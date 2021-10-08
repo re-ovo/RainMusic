@@ -36,6 +36,7 @@ android {
     }
     buildFeatures {
         compose true
+        viewBinding true
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
@@ -90,6 +91,10 @@ dependencies {
     // Dialog
     implementation "io.github.vanpra.compose-material-dialogs:core:0.6.0"
     implementation "io.github.vanpra.compose-material-dialogs:color:0.6.0"
+
+    // 加密库
+    def kryptoVersion = "2.2.0"
+    implementation("com.soywiz.korlibs.krypto:krypto-android:$kryptoVersion")
 
     // test
     testImplementation 'junit:junit:4.13.2'
