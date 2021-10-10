@@ -30,6 +30,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import me.rerere.rainmusic.ui.local.LocalNavController
+import me.rerere.rainmusic.ui.screen.index.IndexScreen
 import me.rerere.rainmusic.ui.screen.login.LoginScreen
 import me.rerere.rainmusic.ui.theme.RainMusicTheme
 import okhttp3.*
@@ -61,7 +62,7 @@ class MainActivity : ComponentActivity() {
                         AnimatedNavHost(
                             modifier = Modifier.fillMaxSize(),
                             navController = navController,
-                            startDestination = "login",
+                            startDestination = "index",
                             enterTransition = { _, _ ->
                                 slideInHorizontally(
                                     initialOffsetX = {
@@ -103,24 +104,7 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable("index") {
-                                Scaffold(
-                                    topBar = {
-                                        TopAppBar(
-                                            title = {
-                                                Text(stringResource(R.string.app_name))
-                                            },
-                                            contentPadding = rememberInsetsPaddingValues(
-                                                insets = LocalWindowInsets.current.statusBars,
-                                                applyBottom = false
-                                            ),
-                                            backgroundColor = MaterialTheme.colors.surface
-                                        )
-                                    }
-                                ) {
-                                    Box(modifier = Modifier.padding(it)) {
-
-                                    }
-                                }
+                                IndexScreen()
                             }
                         }
                     }
