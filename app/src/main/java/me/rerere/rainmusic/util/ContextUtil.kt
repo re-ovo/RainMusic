@@ -5,6 +5,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ClipDescription
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.widget.Toast
 
@@ -55,4 +57,25 @@ fun Context.toast(
         text,
         duration
     ).show()
+}
+
+/**
+ * 判断网络是否是不计费网络
+ */
+fun Context.isFreeNetwork(): Boolean {
+    val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+    val activeNetwork = connectivityManager?.activeNetwork
+    val networkCapabilities = connectivityManager?.getNetworkCapabilities(activeNetwork)
+    return networkCapabilities?.let {
+        when {
+            // WIFI
+            it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            // 以太网
+            it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            // 蜂窝
+            it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> false
+            // 未知
+            else -> true
+        }
+    } ?: true
 }
