@@ -33,6 +33,10 @@ import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.screen.index.IndexScreen
 import me.rerere.rainmusic.ui.screen.login.LoginScreen
 import me.rerere.rainmusic.ui.theme.RainMusicTheme
+import me.rerere.rainmusic.util.defaultEnterTransition
+import me.rerere.rainmusic.util.defaultExitTransition
+import me.rerere.rainmusic.util.defaultPopEnterTransition
+import me.rerere.rainmusic.util.defaultPopExitTransition
 import okhttp3.*
 
 @AndroidEntryPoint
@@ -47,13 +51,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             RainMusicTheme {
                 ProvideWindowInsets {
-                    val systemUiController = rememberSystemUiController()
-                    val darkIcon = MaterialTheme.colors.isLight
-                    SideEffect {
-                        systemUiController.setNavigationBarColor(Color.Transparent, darkIcon)
-                        systemUiController.setStatusBarColor(Color.Transparent, darkIcon)
-                    }
-
                     val navController = rememberAnimatedNavController()
 
                     CompositionLocalProvider(
@@ -63,40 +60,10 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.fillMaxSize(),
                             navController = navController,
                             startDestination = "index",
-                            enterTransition = {
-                                slideInHorizontally(
-                                    initialOffsetX = {
-                                        it
-                                    },
-                                    animationSpec = tween()
-                                )
-                            },
-                            exitTransition = {
-                                slideOutHorizontally(
-                                    targetOffsetX = {
-                                        -it
-                                    },
-                                    animationSpec = tween()
-                                ) + fadeOut(
-                                    animationSpec = tween()
-                                )
-                            },
-                            popEnterTransition = {
-                                slideInHorizontally(
-                                    initialOffsetX = {
-                                        -it
-                                    },
-                                    animationSpec = tween()
-                                )
-                            },
-                            popExitTransition = {
-                                slideOutHorizontally(
-                                    targetOffsetX = {
-                                        it
-                                    },
-                                    animationSpec = tween()
-                                )
-                            }
+                            enterTransition = defaultEnterTransition,
+                            exitTransition = defaultExitTransition,
+                            popEnterTransition = defaultPopEnterTransition,
+                            popExitTransition = defaultPopExitTransition
                         ) {
 
                             composable("login") {
