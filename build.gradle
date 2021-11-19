@@ -6,10 +6,10 @@ task clean(type: Delete) {
 
 buildscript {
     ext {
-        compose_version = '1.1.0-alpha05'
+        compose_version = '1.1.0-beta03'
         hilt_version = '2.39.1'
         kotlin_version = '1.5.31'
-        accompanist_version = '0.19.0'
+        accompanist_version = '0.21.2-beta'
     }
 
     repositories {
@@ -18,7 +18,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.0-alpha13'
+        classpath 'com.android.tools.build:gradle:7.2.0-alpha05'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }

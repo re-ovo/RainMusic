@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.fillMaxSize(),
                             navController = navController,
                             startDestination = "index",
-                            enterTransition = { _, _ ->
+                            enterTransition = {
                                 slideInHorizontally(
                                     initialOffsetX = {
                                         it
@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
                                     animationSpec = tween()
                                 )
                             },
-                            exitTransition = { _, _ ->
+                            exitTransition = {
                                 slideOutHorizontally(
                                     targetOffsetX = {
                                         -it
@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
                                     animationSpec = tween()
                                 )
                             },
-                            popEnterTransition = { _, _ ->
+                            popEnterTransition = {
                                 slideInHorizontally(
                                     initialOffsetX = {
                                         -it
@@ -89,7 +89,7 @@ class MainActivity : ComponentActivity() {
                                     animationSpec = tween()
                                 )
                             },
-                            popExitTransition = { _, _ ->
+                            popExitTransition = {
                                 slideOutHorizontally(
                                     targetOffsetX = {
                                         it
