@@ -1,19 +1,15 @@
 package me.rerere.rainmusic.service
 
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Binder
-import android.os.Build
 import android.os.IBinder
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import me.rerere.rainmusic.AppContext
 import me.rerere.rainmusic.MainActivity
 import me.rerere.rainmusic.R
-import me.rerere.rainmusic.util.createNotificationChannel
 
 /**
  * 音乐播放服务
@@ -23,16 +19,6 @@ class MusicService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-
-        // 注册channel
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            createNotificationChannel(
-                channelId = "music",
-                name = "音乐播放器通知栏组件", // TODO: 本地化
-                description = "请勿禁用该通知", // TODO: 本地化
-                importance = NotificationManager.IMPORTANCE_HIGH
-            )
-        }
 
         val notification = NotificationCompat.Builder(this, "music")
             .setSmallIcon(R.drawable.ic_launcher_foreground)

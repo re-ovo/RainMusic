@@ -1,20 +1,12 @@
 package me.rerere.rainmusic.di
 
-import android.util.Log
-import android.webkit.WebSettings
-import androidx.core.content.edit
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import me.rerere.rainmusic.AppContext
 import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
-import me.rerere.rainmusic.sharedPreferencesOf
 import me.rerere.rainmusic.util.okhttp.CookieHelper
 import me.rerere.rainmusic.util.okhttp.UserAgentInterceptor
-import okhttp3.Cookie
-import okhttp3.CookieJar
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

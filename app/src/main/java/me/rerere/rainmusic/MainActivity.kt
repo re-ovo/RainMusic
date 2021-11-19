@@ -65,7 +65,6 @@ class MainActivity : ComponentActivity() {
                             popEnterTransition = defaultPopEnterTransition,
                             popExitTransition = defaultPopExitTransition
                         ) {
-
                             composable("login") {
                                 LoginScreen()
                             }
