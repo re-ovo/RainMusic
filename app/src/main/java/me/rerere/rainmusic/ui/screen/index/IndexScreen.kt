@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.insets.ui.Scaffold
 import me.rerere.rainmusic.R
-import me.rerere.rainmusic.ui.component.RainMusicTopBar
+import me.rerere.rainmusic.ui.component.RainTopBar
 
 @Composable
 fun IndexScreen(
@@ -17,7 +17,7 @@ fun IndexScreen(
 ) {
     Scaffold(
         topBar = {
-            RainMusicTopBar(
+            RainTopBar(
                 navigationIcon = {
                     IconButton(onClick = { /*TODO*/ }) {
 

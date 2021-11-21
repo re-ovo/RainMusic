@@ -1,19 +1,18 @@
 package me.rerere.rainmusic.ui.screen.login
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -21,8 +20,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.rememberImagePainter
-import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.message
@@ -30,18 +27,18 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import com.vanpra.composematerialdialogs.title
 import dev.burnoo.compose.rememberpreference.rememberStringPreference
 import me.rerere.rainmusic.R
-import me.rerere.rainmusic.sharedPreferencesOf
-import me.rerere.rainmusic.ui.component.RainMusicTopBar
+import me.rerere.rainmusic.ui.component.RainTopBar
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.util.toast
 
+@ExperimentalMaterial3Api
 @Composable
 fun LoginScreen(
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     Scaffold(
         topBar = {
-            RainMusicTopBar(
+            RainTopBar(
                 title = {
                     Text(text = "登录")
                 }
@@ -114,8 +111,16 @@ private fun Body(
         }
     }
 
-    var username by rememberStringPreference(keyName = "login.phone", defaultValue = "", initialValue = "")
-    var password by rememberStringPreference(keyName = "login.password", defaultValue = "",initialValue = "")
+    var username by rememberStringPreference(
+        keyName = "login.phone",
+        defaultValue = "",
+        initialValue = ""
+    )
+    var password by rememberStringPreference(
+        keyName = "login.password",
+        defaultValue = "",
+        initialValue = ""
+    )
     Column(
         modifier = Modifier.width(IntrinsicSize.Min),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -146,7 +151,7 @@ private fun Body(
             leadingIcon = {
                 Text(
                     text = "+86",
-                    color = MaterialTheme.colors.primary
+                    color = MaterialTheme.colorScheme.primary
                 )
             },
             keyboardOptions = KeyboardOptions(

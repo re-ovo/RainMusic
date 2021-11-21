@@ -1,11 +1,16 @@
 package me.rerere.rainmusic.ui.component
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.contentColorFor
 import androidx.compose.material.primarySurface
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import com.google.accompanist.insets.LocalWindowInsets
@@ -13,24 +18,60 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.TopAppBar
 
 @Composable
-fun RainMusicTopBar(
+fun RainTopBar(
     title: @Composable () -> Unit,
-    navigationIcon: @Composable (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = rememberInsetsPaddingValues(
+        insets = LocalWindowInsets.current.statusBars,
+        applyBottom = false
+    ),
+    navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
-    backgroundColor: Color = MaterialTheme.colors.surface,
-    contentColor: Color = contentColorFor(backgroundColor),
-    elevation: Dp = AppBarDefaults.TopAppBarElevation,
-) {
-    TopAppBar(
-        title = title,
-        navigationIcon = navigationIcon,
-        actions = actions,
-        elevation = elevation,
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        contentPadding = rememberInsetsPaddingValues(
-            insets = LocalWindowInsets.current.statusBars,
-            applyBottom = false
-        )
-    )
+    colors: TopAppBarColors = TopAppBarDefaults.smallTopAppBarColors(),
+    appBarStyle: AppBarStyle = AppBarStyle.Small,
+    scrollBehavior: TopAppBarScrollBehavior? = null
+){
+    val scrollFraction = scrollBehavior?.scrollFraction ?: 0f
+    val appBarContainerColor by colors.containerColor(scrollFraction)
+
+    Surface(modifier = modifier, color = appBarContainerColor) {
+        when(appBarStyle){
+            AppBarStyle.Small -> {
+                SmallTopAppBar(
+                    modifier = Modifier.padding(contentPadding),
+                    title = title,
+                    navigationIcon = navigationIcon,
+                    actions = actions,
+                    colors = colors,
+                    scrollBehavior = scrollBehavior
+                )
+            }
+            AppBarStyle.Medium -> {
+                MediumTopAppBar(
+                    modifier = Modifier.padding(contentPadding),
+                    title = title,
+                    navigationIcon = navigationIcon,
+                    actions = actions,
+                    colors = colors,
+                    scrollBehavior = scrollBehavior
+                )
+            }
+            AppBarStyle.Large -> {
+                LargeTopAppBar(
+                    modifier = Modifier.padding(contentPadding),
+                    title = title,
+                    navigationIcon = navigationIcon,
+                    actions = actions,
+                    colors = colors,
+                    scrollBehavior = scrollBehavior
+                )
+            }
+        }
+    }
+}
+
+enum class AppBarStyle {
+    Small,
+    Medium,
+    Large
 }

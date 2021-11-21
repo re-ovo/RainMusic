@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
                         AnimatedNavHost(
                             modifier = Modifier.fillMaxSize(),
                             navController = navController,
-                            startDestination = "index",
+                            startDestination = "login",
                             enterTransition = defaultEnterTransition,
                             exitTransition = defaultExitTransition,
                             popEnterTransition = defaultPopEnterTransition,
