@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
@@ -30,6 +31,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import me.rerere.rainmusic.ui.local.LocalNavController
+import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexScreen
 import me.rerere.rainmusic.ui.screen.login.LoginScreen
 import me.rerere.rainmusic.ui.theme.RainMusicTheme
@@ -39,9 +41,10 @@ import me.rerere.rainmusic.util.defaultPopEnterTransition
 import me.rerere.rainmusic.util.defaultPopExitTransition
 import okhttp3.*
 
+@ExperimentalMaterial3Api
+@ExperimentalAnimationApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,11 +68,11 @@ class MainActivity : ComponentActivity() {
                             popEnterTransition = defaultPopEnterTransition,
                             popExitTransition = defaultPopExitTransition
                         ) {
-                            composable("login") {
+                            composable(Screen.Login.route) {
                                 LoginScreen()
                             }
 
-                            composable("index") {
+                            composable(Screen.Index.route) {
                                 IndexScreen()
                             }
                         }

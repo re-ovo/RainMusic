@@ -11,7 +11,7 @@ import android.os.Build
 import android.widget.Toast
 
 /**
- * 快速创建通知渠道
+ * 创建通知渠道
  *
  * @param channelId 渠道ID
  * @param name 渠道名称
@@ -43,7 +43,7 @@ fun Context.createNotificationChannel(
 }
 
 /**
- * 快速发送toast通知
+ * 发送toast通知
  *
  * @param text 通知内容
  * @param duration 通知长短

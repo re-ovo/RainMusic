@@ -123,7 +123,8 @@ private fun Body(
     )
     Column(
         modifier = Modifier.width(IntrinsicSize.Min),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Image(
             painter = painterResource(R.drawable.netease_music),
