@@ -34,23 +34,21 @@ class LoginViewModel @Inject constructor(
         phone: String,
         password: String
     ) {
-        viewModelScope.launch {
-            userRepo.loginCellPhone(
-                phone,
-                password
-            ).onEach {
-                loginState.value = when(it){
-                    is DataState.Success -> when(it.data.code){
-                        200 -> 1000
-                        502 -> 2
-                        501 -> 3
-                        else -> -1
-                    }
-                    is DataState.Loading -> 1
-                    is DataState.Error -> -1
-                    is DataState.Empty -> 0
+        userRepo.loginCellPhone(
+            phone,
+            password
+        ).onEach {
+            loginState.value = when (it) {
+                is DataState.Success -> when (it.data.code) {
+                    200 -> 1000
+                    502 -> 2
+                    501 -> 3
+                    else -> -1
                 }
-            }.launchIn(viewModelScope)
-        }
+                is DataState.Loading -> 1
+                is DataState.Error -> -1
+                is DataState.Empty -> 0
+            }
+        }.launchIn(viewModelScope)
     }
 }

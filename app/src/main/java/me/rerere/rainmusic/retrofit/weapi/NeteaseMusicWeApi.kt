@@ -13,9 +13,18 @@ interface NeteaseMusicWeApi {
     /**
      * 登录网易云
      */
-    @POST("weapi/login/cellphone")
+    @POST("/weapi/login/cellphone")
     @FormUrlEncoded
     suspend fun loginCellphone(
         @FieldMap body: Map<String, String>
     ) : LoginResponse
+
+    /**
+     * 刷新登录状态
+     */
+    @POST("/weapi/login/token/refresh")
+    @FormUrlEncoded
+    suspend fun refreshLogin(
+        @FieldMap body: Map<String, String>
+    )
 }

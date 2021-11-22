@@ -30,17 +30,17 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideNeateaseMusicService(
+    fun provideRetrofitClient(
         okHttpClient: OkHttpClient
     ): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("https://music.163.com/")
+        .baseUrl("https://music.163.com")
         .client(okHttpClient)
         .build()
 
     @Singleton
     @Provides
-    fun provideNeteaseService(
+    fun provideNeteaseWeApi(
         retrofit: Retrofit
     ): NeteaseMusicWeApi = retrofit.create(
         NeteaseMusicWeApi::class.java

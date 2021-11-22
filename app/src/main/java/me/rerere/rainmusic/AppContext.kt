@@ -3,6 +3,7 @@ package me.rerere.rainmusic
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
+import android.content.SharedPreferences
 import dagger.hilt.android.HiltAndroidApp
 import me.rerere.rainmusic.util.createNotificationChannel
 
@@ -28,4 +29,4 @@ class AppContext : Application() {
 
 fun sharedPreferencesOf(
     name: String
-) = AppContext.instance.getSharedPreferences(name, Context.MODE_PRIVATE)
+): SharedPreferences = AppContext.instance.getSharedPreferences(name, Context.MODE_PRIVATE)

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.contentColorFor
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.primarySurface
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -16,6 +18,7 @@ import androidx.compose.ui.unit.Dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.TopAppBar
+import me.rerere.rainmusic.ui.local.LocalNavController
 
 @Composable
 fun RainTopBar(
@@ -67,6 +70,16 @@ fun RainTopBar(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun PopBackIcon(){
+    val navController = LocalNavController.current
+    IconButton(onClick = {
+        navController.popBackStack()
+    }) {
+        Icon(Icons.Rounded.ArrowBack, "Back")
     }
 }
 

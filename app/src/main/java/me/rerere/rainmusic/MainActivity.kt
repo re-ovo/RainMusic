@@ -28,12 +28,14 @@ import com.google.accompanist.insets.ui.TopAppBar
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexScreen
 import me.rerere.rainmusic.ui.screen.login.LoginScreen
+import me.rerere.rainmusic.ui.screen.search.SearchScreen
 import me.rerere.rainmusic.ui.theme.RainMusicTheme
 import me.rerere.rainmusic.util.defaultEnterTransition
 import me.rerere.rainmusic.util.defaultExitTransition
@@ -41,10 +43,11 @@ import me.rerere.rainmusic.util.defaultPopEnterTransition
 import me.rerere.rainmusic.util.defaultPopExitTransition
 import okhttp3.*
 
-@ExperimentalMaterial3Api
-@ExperimentalAnimationApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @ExperimentalPagerApi
+    @ExperimentalMaterial3Api
+    @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -62,7 +65,7 @@ class MainActivity : ComponentActivity() {
                         AnimatedNavHost(
                             modifier = Modifier.fillMaxSize(),
                             navController = navController,
-                            startDestination = "login",
+                            startDestination = "index",
                             enterTransition = defaultEnterTransition,
                             exitTransition = defaultExitTransition,
                             popEnterTransition = defaultPopEnterTransition,
@@ -74,6 +77,10 @@ class MainActivity : ComponentActivity() {
 
                             composable(Screen.Index.route) {
                                 IndexScreen()
+                            }
+
+                            composable(Screen.Search.route){
+                                SearchScreen()
                             }
                         }
                     }

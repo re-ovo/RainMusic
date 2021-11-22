@@ -205,7 +205,7 @@ private fun Body(
         ) {
             Text(
                 modifier = Modifier.padding(16.dp),
-                text = "本APP仅会和网易官方API通信，不会泄露你的密码，请放心使用"
+                text = "本APP不提供 注册/开通黑胶/修改个人信息 等功能，如果需要，请自行前往网易云官方APP操作！"
             )
         }
     }

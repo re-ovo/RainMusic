@@ -9,9 +9,22 @@ import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.encrypt.encryptWeAPI
 import javax.inject.Inject
 
+private const val TAG = "UserRepo"
+
 class UserRepo @Inject constructor(
     private val weApi: NeteaseMusicWeApi
 ) {
+    fun refreshLogin() = flow {
+        emit(DataState.Loading)
+        try {
+            weApi.refreshLogin(encryptWeAPI())
+            emit(DataState.Success(Unit))
+        }catch (e: java.lang.Exception){
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
+
     fun loginCellPhone(
         phone: String,
         password: String
