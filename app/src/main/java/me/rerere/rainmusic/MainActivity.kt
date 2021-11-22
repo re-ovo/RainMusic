@@ -14,8 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -46,10 +45,7 @@ import me.rerere.rainmusic.ui.screen.index.IndexScreen
 import me.rerere.rainmusic.ui.screen.login.LoginScreen
 import me.rerere.rainmusic.ui.screen.search.SearchScreen
 import me.rerere.rainmusic.ui.theme.RainMusicTheme
-import me.rerere.rainmusic.util.defaultEnterTransition
-import me.rerere.rainmusic.util.defaultExitTransition
-import me.rerere.rainmusic.util.defaultPopEnterTransition
-import me.rerere.rainmusic.util.defaultPopExitTransition
+import me.rerere.rainmusic.util.*
 import okhttp3.*
 import javax.inject.Inject
 
@@ -117,6 +113,11 @@ class MainActivity : ComponentActivity() {
             .refreshLogin()
             .onCompletion {
                 preparingData = false
+            }
+            .onEach {
+                if(it is DataState.Error){
+                    toast("未登录!")
+                }
             }
             .launchIn(lifecycleScope)
     }

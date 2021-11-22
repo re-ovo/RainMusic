@@ -1,6 +1,10 @@
 package me.rerere.rainmusic.retrofit.weapi
 
-import me.rerere.rainmusic.retrofit.weapi.response.LoginResponse
+import com.google.gson.JsonObject
+import me.rerere.rainmusic.retrofit.weapi.model.LoginResponse
+import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
+import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
+import me.rerere.rainmusic.util.encrypt.encryptWeAPI
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
@@ -25,6 +29,24 @@ interface NeteaseMusicWeApi {
     @POST("/weapi/login/token/refresh")
     @FormUrlEncoded
     suspend fun refreshLogin(
+        @FieldMap body: Map<String, String> = encryptWeAPI()
+    ) : JsonObject
+
+    /**
+     * 推荐歌单
+     */
+    @POST("/weapi/personalized/playlist")
+    @FormUrlEncoded
+    suspend fun personalizedPlaylist(
         @FieldMap body: Map<String, String>
-    )
+    ): PersonalizedPlaylist
+
+    /**
+     * 最新歌曲
+     */
+    @POST("/weapi/personalized/newsong")
+    @FormUrlEncoded
+    suspend fun getNewSongs(
+        @FieldMap body: Map<String, String>
+    ): NewSongs
 }

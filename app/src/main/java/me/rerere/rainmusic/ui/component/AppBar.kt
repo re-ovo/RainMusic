@@ -11,10 +11,12 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.primarySurface
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.TopAppBar
@@ -68,6 +70,29 @@ fun RainTopBar(
                     colors = colors,
                     scrollBehavior = scrollBehavior
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun RainBottomNavigation(
+    content: @Composable RowScope.() -> Unit
+) {
+    Surface(
+        tonalElevation = 3.dp
+    ) {
+        CompositionLocalProvider(
+            LocalAbsoluteTonalElevation provides LocalAbsoluteTonalElevation.current - 3.dp
+        ) {
+            NavigationBar(
+                modifier = Modifier.padding(
+                    rememberInsetsPaddingValues(
+                        insets = LocalWindowInsets.current.navigationBars
+                    )
+                )
+            ) {
+                content()
             }
         }
     }

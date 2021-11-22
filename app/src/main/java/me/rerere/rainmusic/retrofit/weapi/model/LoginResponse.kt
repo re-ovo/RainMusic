@@ -1,4 +1,4 @@
-package me.rerere.rainmusic.retrofit.weapi.response
+package me.rerere.rainmusic.retrofit.weapi.model
 import com.google.gson.annotations.SerializedName
 
 

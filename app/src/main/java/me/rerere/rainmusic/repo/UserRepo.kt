@@ -1,11 +1,9 @@
 package me.rerere.rainmusic.repo
 
 import com.soywiz.krypto.md5
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
 import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
-import me.rerere.rainmusic.retrofit.weapi.response.LoginResponse
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.encrypt.encryptWeAPI
 import javax.inject.Inject
@@ -19,9 +17,10 @@ class UserRepo @Inject constructor(
     fun refreshLogin() = flow {
         emit(DataState.Loading)
         try {
-            weApi.refreshLogin(encryptWeAPI())
+            val result = weApi.refreshLogin()
+            require(result.get("code").asInt != 301)
             emit(DataState.Success(Unit))
-        }catch (e: java.lang.Exception){
+        } catch (e: java.lang.Exception) {
             e.printStackTrace()
             emit(DataState.Error(e))
         }
@@ -55,6 +54,10 @@ class UserRepo @Inject constructor(
         emit(DataState.Loading)
         try {
             val result = api.getAccountDetail()
+
+            require(result.profile != null)
+            require(result.account != null)
+
             emit(DataState.Success(result))
         } catch (e: Exception) {
             e.printStackTrace()

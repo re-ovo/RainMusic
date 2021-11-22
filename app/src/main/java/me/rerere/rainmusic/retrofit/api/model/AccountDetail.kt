@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class AccountDetail(
     @SerializedName("account")
-    val account: Account,
+    val account: Account?,
     @SerializedName("code")
     val code: Int,
     @SerializedName("profile")
-    val profile: Profile
+    val profile: Profile?
 ) {
     data class Account(
         @SerializedName("anonimousUser")

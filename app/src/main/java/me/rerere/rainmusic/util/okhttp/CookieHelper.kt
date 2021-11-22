@@ -10,6 +10,12 @@ import okhttp3.HttpUrl
 private const val TAG = "CookieHelper"
 
 object CookieHelper : CookieJar {
+    fun logout(){
+        sharedPreferencesOf("cookie").edit {
+            clear()
+        }
+    }
+
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
         val cookies = sharedPreferencesOf("cookie").all.map { (k, v) ->
             Cookie.Builder()
