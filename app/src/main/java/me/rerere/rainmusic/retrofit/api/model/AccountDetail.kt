@@ -23,7 +23,7 @@ data class AccountDetail(
         @SerializedName("donateVersion")
         val donateVersion: Int,
         @SerializedName("id")
-        val id: Int,
+        val id: Long,
         @SerializedName("paidFee")
         val paidFee: Boolean,
         @SerializedName("status")

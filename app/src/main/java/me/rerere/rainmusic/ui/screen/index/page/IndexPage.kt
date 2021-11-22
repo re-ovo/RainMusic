@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,8 @@ import coil.compose.rememberImagePainter
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
+import me.rerere.rainmusic.ui.local.LocalNavController
+import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexViewModel
 import me.rerere.rainmusic.util.DataState
 
@@ -91,10 +94,13 @@ private fun RecommendPlayLists(
 private fun PlaylistCard(
     playlist: PersonalizedPlaylist.Result
 ) {
+    val navController = LocalNavController.current
     Column(
         modifier = Modifier
             .clickable {
-
+                Screen.Playlist.navigate(navController){
+                    "$it/${playlist.id}"
+                }
             }
             .padding(8.dp)
             .width(IntrinsicSize.Min),

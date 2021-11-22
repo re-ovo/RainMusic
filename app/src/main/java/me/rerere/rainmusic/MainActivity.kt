@@ -22,6 +22,8 @@ import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -34,27 +36,33 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.rerere.rainmusic.repo.UserRepo
 import me.rerere.rainmusic.ui.local.LocalNavController
+import me.rerere.rainmusic.ui.local.LocalUserData
+import me.rerere.rainmusic.ui.local.UserData
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexScreen
 import me.rerere.rainmusic.ui.screen.login.LoginScreen
+import me.rerere.rainmusic.ui.screen.playlist.PlaylistScreen
 import me.rerere.rainmusic.ui.screen.search.SearchScreen
 import me.rerere.rainmusic.ui.theme.RainMusicTheme
 import me.rerere.rainmusic.util.*
+import me.rerere.rainmusic.util.okhttp.CookieHelper
 import okhttp3.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    var preparingData = true
-
     @Inject
     lateinit var userRepo: UserRepo
+
+    var preparingData = true
+    var userData by mutableStateOf(UserData.VISITOR)
 
     @ExperimentalPagerApi
     @ExperimentalMaterial3Api
@@ -79,7 +87,10 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberAnimatedNavController()
 
                     CompositionLocalProvider(
-                        LocalNavController provides navController
+                        // 全局提供NavController
+                        LocalNavController provides navController,
+                        // 全局提供用户账号信息
+                        LocalUserData provides userData
                     ) {
                         AnimatedNavHost(
                             modifier = Modifier.fillMaxSize(),
@@ -101,6 +112,17 @@ class MainActivity : ComponentActivity() {
                             composable(Screen.Search.route) {
                                 SearchScreen()
                             }
+
+                            composable(
+                                route = "${Screen.Playlist.route}/{id}",
+                                arguments = listOf(
+                                    navArgument("id") {
+                                        type = NavType.LongType
+                                    }
+                                )
+                            ) {
+                                PlaylistScreen(id = it.arguments!!.getInt("id"))
+                            }
                         }
                     }
                 }
@@ -109,16 +131,27 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun init() {
-        userRepo
-            .refreshLogin()
-            .onCompletion {
-                preparingData = false
+        combine(
+            userRepo.refreshLogin(),
+            userRepo.getAccountDetail()
+        ) { a, b ->
+            a to b
+        }.onEach {
+            if (it.first is DataState.Error) {
+                toast("未登录!")
+                CookieHelper.logout()
             }
-            .onEach {
-                if(it is DataState.Error){
-                    toast("未登录!")
-                }
+
+            if (it.second is DataState.Success) {
+                val data = it.second.read()
+                userData = UserData(
+                    id = data.account!!.id,
+                    nickname = data.profile!!.nickname,
+                    avatarUrl = data.profile.avatarUrl
+                )
             }
-            .launchIn(lifecycleScope)
+        }.onCompletion {
+            preparingData = false
+        }.launchIn(lifecycleScope)
     }
 }

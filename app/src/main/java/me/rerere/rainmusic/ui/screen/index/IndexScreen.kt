@@ -40,6 +40,8 @@ import me.rerere.rainmusic.ui.component.RainBottomNavigation
 import me.rerere.rainmusic.ui.component.RainTopBar
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.local.LocalNavController
+import me.rerere.rainmusic.ui.local.LocalUserData
+import me.rerere.rainmusic.ui.local.UserData
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.page.DiscoverPage
 import me.rerere.rainmusic.ui.screen.index.page.IndexPage
@@ -91,9 +93,7 @@ fun IndexScreen(
         ) { page ->
             when (page) {
                 0 -> {
-                    IndexPage(
-                        indexViewModel = indexViewModel
-                    )
+                    IndexPage(indexViewModel = indexViewModel)
                 }
                 1 -> {
                     DiscoverPage()
@@ -116,12 +116,13 @@ private fun IndexTopBar(
 ) {
     val navController = LocalNavController.current
     val scope = rememberCoroutineScope()
-    val accountDetail by indexViewModel.accountDetail.collectAsState()
+    // val accountDetail by indexViewModel.accountDetail.collectAsState()
+    val accountData = LocalUserData.current
     RainTopBar(
         navigationIcon = {
             val avatarPainter = rememberImagePainter(
-                data = if (accountDetail is DataState.Success)
-                    accountDetail.read().profile?.avatarUrl
+                data = if (!accountData.isVisitor)
+                    accountData.avatarUrl
                 else
                     R.drawable.netease_music
             )
@@ -140,8 +141,8 @@ private fun IndexTopBar(
             }
         },
         title = {
-            if (accountDetail is DataState.Success) {
-                Text(text = accountDetail.readSafely()?.profile?.nickname ?: "错误")
+            if (!accountData.isVisitor) {
+                Text(text = accountData.nickname)
             } else {
                 Text(text = stringResource(R.string.app_name))
             }
