@@ -52,6 +52,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.activity:activity-compose:1.4.0'
 
+    // splash screen
+    implementation "androidx.core:core-splashscreen:1.0.0-alpha02"
+
     // 持久化State
     implementation 'dev.burnoo:compose-remember-preference:0.3.4'
 
@@ -72,6 +75,9 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil-compose:1.4.0")
+
+    // Material Motion 动画
+    implementation "com.github.fornewid.material-motion-compose:core:0.8.0-beta03"
 
     // accompanist
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"

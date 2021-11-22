@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.RainMusic" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
     <style name="Theme.RainMusic.Splash" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/Theme.RainMusic</item>
 
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
-        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenBackground">@color/black</item>
     </style>
 </resources>

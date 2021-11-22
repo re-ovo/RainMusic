@@ -3,6 +3,7 @@ package me.rerere.rainmusic.repo
 import com.soywiz.krypto.md5
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
 import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
 import me.rerere.rainmusic.retrofit.weapi.response.LoginResponse
 import me.rerere.rainmusic.util.DataState
@@ -12,6 +13,7 @@ import javax.inject.Inject
 private const val TAG = "UserRepo"
 
 class UserRepo @Inject constructor(
+    private val api: NeteaseMusicApi,
     private val weApi: NeteaseMusicWeApi
 ) {
     fun refreshLogin() = flow {
@@ -28,7 +30,7 @@ class UserRepo @Inject constructor(
     fun loginCellPhone(
         phone: String,
         password: String
-    ): Flow<DataState<LoginResponse>> = flow {
+    ) = flow {
         emit(DataState.Loading)
         kotlinx.coroutines.delay(500) // 等待1秒，防止登录对话框来不及显示
         try {
@@ -42,6 +44,17 @@ class UserRepo @Inject constructor(
                     )
                 )
             )
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
+
+    fun getAccountDetail() = flow {
+        emit(DataState.Loading)
+        try {
+            val result = api.getAccountDetail()
             emit(DataState.Success(result))
         } catch (e: Exception) {
             e.printStackTrace()

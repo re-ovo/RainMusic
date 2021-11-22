@@ -19,7 +19,10 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.core.splashscreen.SplashScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -31,6 +34,12 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import me.rerere.rainmusic.repo.UserRepo
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexScreen
@@ -42,14 +51,28 @@ import me.rerere.rainmusic.util.defaultExitTransition
 import me.rerere.rainmusic.util.defaultPopEnterTransition
 import me.rerere.rainmusic.util.defaultPopExitTransition
 import okhttp3.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    var preparingData = true
+
+    @Inject
+    lateinit var userRepo: UserRepo
+
     @ExperimentalPagerApi
     @ExperimentalMaterial3Api
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen().apply {
+            setKeepVisibleCondition {
+                preparingData
+            }
+        }
+
+        init()
 
         // Edge to Edge
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -79,7 +102,7 @@ class MainActivity : ComponentActivity() {
                                 IndexScreen()
                             }
 
-                            composable(Screen.Search.route){
+                            composable(Screen.Search.route) {
                                 SearchScreen()
                             }
                         }
@@ -87,5 +110,14 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun init() {
+        userRepo
+            .refreshLogin()
+            .onCompletion {
+                preparingData = false
+            }
+            .launchIn(lifecycleScope)
     }
 }

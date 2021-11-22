@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
 import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
 import me.rerere.rainmusic.util.okhttp.CookieHelper
 import me.rerere.rainmusic.util.okhttp.UserAgentInterceptor
@@ -44,5 +45,13 @@ object NetworkModule {
         retrofit: Retrofit
     ): NeteaseMusicWeApi = retrofit.create(
         NeteaseMusicWeApi::class.java
+    )
+
+    @Singleton
+    @Provides
+    fun provideNeteaseApi(
+        retrofit: Retrofit
+    ): NeteaseMusicApi = retrofit.create(
+        NeteaseMusicApi::class.java
     )
 }

@@ -1,5 +1,9 @@
 package me.rerere.rainmusic.ui.screen.index
 
+import android.service.autofill.Dataset
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,13 +19,18 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.TrendingUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.ImageLoader
+import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -29,13 +38,19 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.placeholder.placeholder
 import kotlinx.coroutines.launch
 import me.rerere.rainmusic.R
 import me.rerere.rainmusic.ui.component.AppBarStyle
 import me.rerere.rainmusic.ui.component.RainTopBar
+import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.screen.Screen
+import me.rerere.rainmusic.util.DataState
+import soup.compose.material.motion.MaterialFade
+import soup.compose.material.motion.MaterialFadeThrough
 
+@ExperimentalAnimationApi
 @ExperimentalPagerApi
 @ExperimentalMaterial3Api
 @Composable
@@ -76,12 +91,23 @@ fun IndexScreen(
                 .padding(it),
             count = 3,
             state = pagerState
-        ) {
+        ) { page ->
+            when (page) {
+                0 -> {
 
+                }
+                1 -> {
+
+                }
+                2 -> {
+
+                }
+            }
         }
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable
 private fun IndexTopBar(
@@ -91,25 +117,33 @@ private fun IndexTopBar(
 ) {
     val navController = LocalNavController.current
     val scope = rememberCoroutineScope()
+    val accountDetail by indexViewModel.accountDetail.collectAsState()
     RainTopBar(
         navigationIcon = {
+            val avatarPainter = rememberImagePainter(
+                data = if (accountDetail is DataState.Success) accountDetail.read().profile.avatarUrl else null
+            )
             IconButton(onClick = {
                 scope.launch {
                     scaffoldState.drawerState.open()
                 }
             }) {
-                // TODO: 加载用户头像
                 Icon(
-                    modifier = Modifier.clip(CircleShape),
-                    painter = rememberImagePainter(
-                        data = "TODO"
-                    ),
-                    contentDescription = "avatar"
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .shimmerPlaceholder(avatarPainter.state is ImagePainter.State.Loading),
+                    painter = avatarPainter,
+                    contentDescription = "avatar",
+                    tint = Color.Unspecified
                 )
             }
         },
         title = {
-            Text(text = stringResource(R.string.app_name))
+            if (accountDetail is DataState.Success) {
+                Text(text = accountDetail.readSafely()?.profile?.nickname ?: "错误")
+            } else {
+                Text(text = stringResource(R.string.app_name))
+            }
         },
         actions = {
             IconButton(onClick = {
