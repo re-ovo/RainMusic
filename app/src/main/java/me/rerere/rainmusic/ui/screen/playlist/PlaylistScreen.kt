@@ -213,10 +213,12 @@ private fun PlaylistMusic(
                     text = track.name,
                     style = MaterialTheme.typography.titleMedium
                 )
-                Text(
-                    text = track.al.name,
-                    style = MaterialTheme.typography.labelMedium
-                )
+                Row {
+                    Text(
+                        text = track.ar.joinToString(separator = "/") { it.name } + if(track.al.name.isNotBlank()) " - ${track.al.name}" else "",
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
             }
 
             IconButton(onClick = { /*TODO*/ }) {

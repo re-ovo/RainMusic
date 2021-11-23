@@ -48,6 +48,7 @@ import me.rerere.rainmusic.ui.local.UserData
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexScreen
 import me.rerere.rainmusic.ui.screen.login.LoginScreen
+import me.rerere.rainmusic.ui.screen.player.PlayerScreen
 import me.rerere.rainmusic.ui.screen.playlist.PlaylistScreen
 import me.rerere.rainmusic.ui.screen.search.SearchScreen
 import me.rerere.rainmusic.ui.theme.RainMusicTheme
@@ -122,6 +123,10 @@ class MainActivity : ComponentActivity() {
                                 )
                             ) {
                                 PlaylistScreen(id = it.arguments!!.getLong("id"))
+                            }
+
+                            composable(Screen.Player.route){
+                                PlayerScreen()
                             }
                         }
                     }

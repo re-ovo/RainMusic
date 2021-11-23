@@ -7,6 +7,7 @@ sealed class Screen(val route: String){
     object Index: Screen("index")
     object Search: Screen("search")
     object Playlist: Screen("playlist")
+    object Player: Screen("player")
 
     inline fun navigate(
         navController: NavController,

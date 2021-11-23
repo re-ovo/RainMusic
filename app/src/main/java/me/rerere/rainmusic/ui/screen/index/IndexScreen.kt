@@ -38,6 +38,7 @@ import me.rerere.rainmusic.ui.screen.index.page.DiscoverPage
 import me.rerere.rainmusic.ui.screen.index.page.IndexPage
 import me.rerere.rainmusic.ui.screen.index.page.LibraryPage
 import me.rerere.rainmusic.util.DataState
+import me.rerere.rainmusic.util.okhttp.CookieHelper
 
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -149,6 +150,11 @@ private fun IndexTopBar(
             }
         },
         actions = {
+            TextButton(onClick = {
+                CookieHelper.logout()
+            }) {
+                Text(text = "注销登录 (测试)")
+            }
             IconButton(onClick = {
                 navController.navigate(Screen.Search.route)
             }) {
