@@ -3,6 +3,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/network)
 [![GitHub stars](https://img.shields.io/github/stars/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/stargazers)
 [![GitHub license](https://img.shields.io/github/license/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/blob/master/LICENSE)
+
 RainMusic是一个使用Jetpack Compose构建的网易云第三方app, 采用Material You设计，专注听歌功能，没有社交功能，还你一个纯净的音乐APP
 
 ## 📦️ 下载安装包
@@ -21,11 +22,11 @@ RainMusic是一个使用Jetpack Compose构建的网易云第三方app, 采用Mat
 * 自动签到
 
 ## 📭 常见问题
-1. 有没有iOS版?
+1. 有没有iOS版?   
    答: 当然没有，用iOS就和小众app说再见吧
-2. 使用这个app有账号安全隐患吗?
+2. 使用这个app有账号安全隐患吗?   
    答: 本app之和网易官方API通信，欢迎检查代码，同时请在这里下载app，请不要下载来路不明的版本
-3. 能否添加评论功能?
+3. 能否添加评论功能?   
    答: 不会添加
 
 ## 🎲 技术栈
