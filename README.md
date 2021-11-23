@@ -38,7 +38,7 @@ RainMusic是一个使用Jetpack Compose构建的网易云第三方app, 采用Mat
 * Retrofit
 * Hilt 依赖注入
 
-[无业游民, 有无大佬内推😅]
+~~快毕业的无业游民, 有无大佬内推~~😅
 
 ## 🔭 参与到本项目
 如果你懂Jetpack Compose和Kotlin，欢迎提交PR!
