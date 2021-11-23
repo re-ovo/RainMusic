@@ -135,6 +135,7 @@ private fun PlaylistCard(
 
 @Composable
 fun LargeButton() {
+    val navController = LocalNavController.current
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -151,6 +152,9 @@ fun LargeButton() {
             ) {
                 Surface(
                     modifier = Modifier
+                        .clickable {
+
+                        }
                         .aspectRatio(2f)
                         .weight(1f),
                     tonalElevation = 12.dp,
@@ -166,6 +170,9 @@ fun LargeButton() {
 
                 Surface(
                     modifier = Modifier
+                        .clickable {
+
+                        }
                         .aspectRatio(2f)
                         .weight(1f),
                     tonalElevation = 12.dp,

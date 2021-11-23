@@ -63,17 +63,7 @@ fun IndexScreen(
             BottomNavigationBar(
                 pagerState = pagerState
             )
-        },
-        drawerContent = {
-            DrawerContent()
-        },
-        drawerShape = RoundedCornerShape(
-            topStart = 0.dp,
-            bottomStart = 0.dp,
-            topEnd = 16.dp,
-            bottomEnd = 16.dp
-        ),
-        drawerGesturesEnabled = false
+        }
     ) {
         Column {
             NetworkBanner(indexViewModel)
@@ -187,10 +177,10 @@ private fun BottomNavigationBar(
                 }
             },
             icon = {
-                Icon(Icons.Rounded.TrendingUp, null)
+                Icon(Icons.Rounded.Recommend, null)
             },
             label = {
-                Text(text = "首页")
+                Text(text = "推荐")
             }
         )
 

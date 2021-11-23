@@ -121,7 +121,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             ) {
-                                PlaylistScreen(id = it.arguments!!.getInt("id"))
+                                PlaylistScreen(id = it.arguments!!.getLong("id"))
                             }
                         }
                     }
