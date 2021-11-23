@@ -22,6 +22,9 @@ import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.TopAppBar
 import me.rerere.rainmusic.ui.local.LocalNavController
 
+/**
+ * 支持Edge to Edge的TopBar
+ */
 @Composable
 fun RainTopBar(
     title: @Composable () -> Unit,
@@ -75,6 +78,9 @@ fun RainTopBar(
     }
 }
 
+/**
+ * 支持Edge to Edge的 NavigationBar
+ */
 @Composable
 fun RainBottomNavigation(
     content: @Composable RowScope.() -> Unit
@@ -98,6 +104,9 @@ fun RainBottomNavigation(
     }
 }
 
+/**
+ * 点击返回上一级的按钮
+ */
 @Composable
 fun PopBackIcon(){
     val navController = LocalNavController.current
@@ -108,6 +117,9 @@ fun PopBackIcon(){
     }
 }
 
+/**
+ * 顶栏样式
+ */
 enum class AppBarStyle {
     Small,
     Medium,

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
+import me.rerere.rainmusic.ui.component.Banner
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.screen.Screen
@@ -84,6 +85,15 @@ private fun RecommendPlayLists(
                             )
                         }
                     }
+                    is DataState.Error -> {
+                        items(5) {
+                            Box(
+                                modifier = Modifier
+                                    .background(MaterialTheme.colorScheme.surface)
+                                    .size(100.dp)
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -98,7 +108,7 @@ private fun PlaylistCard(
     Column(
         modifier = Modifier
             .clickable {
-                Screen.Playlist.navigate(navController){
+                Screen.Playlist.navigate(navController) {
                     "$it/${playlist.id}"
                 }
             }

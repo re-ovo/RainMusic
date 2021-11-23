@@ -1,18 +1,14 @@
 package me.rerere.rainmusic.ui.screen.index
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.FeaturedPlayList
-import androidx.compose.material.icons.rounded.Headphones
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.TrendingUp
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,27 +17,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
+import me.rerere.rainmusic.MainActivity
 import me.rerere.rainmusic.R
-import me.rerere.rainmusic.ui.component.AppBarStyle
-import me.rerere.rainmusic.ui.component.RainBottomNavigation
-import me.rerere.rainmusic.ui.component.RainTopBar
-import me.rerere.rainmusic.ui.component.shimmerPlaceholder
+import me.rerere.rainmusic.ui.component.*
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.local.LocalUserData
-import me.rerere.rainmusic.ui.local.UserData
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.page.DiscoverPage
 import me.rerere.rainmusic.ui.screen.index.page.IndexPage
@@ -84,24 +75,44 @@ fun IndexScreen(
         ),
         drawerGesturesEnabled = false
     ) {
-        HorizontalPager(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
-            count = 3,
-            state = pagerState,
-        ) { page ->
-            when (page) {
-                0 -> {
-                    IndexPage(indexViewModel = indexViewModel)
-                }
-                1 -> {
-                    DiscoverPage()
-                }
-                2 -> {
-                    LibraryPage()
+        Column {
+            NetworkBanner(indexViewModel)
+
+            HorizontalPager(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it),
+                count = 3,
+                state = pagerState,
+            ) { page ->
+                when (page) {
+                    0 -> {
+                        IndexPage(indexViewModel = indexViewModel)
+                    }
+                    1 -> {
+                        DiscoverPage()
+                    }
+                    2 -> {
+                        LibraryPage()
+                    }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun NetworkBanner(
+    indexViewModel: IndexViewModel
+) {
+    val context = LocalContext.current
+    val data by indexViewModel.personalizedSongs.collectAsState()
+    AnimatedVisibility(
+        visible = data is DataState.Error
+    ) {
+        NetworkIssueBanner {
+            (context as MainActivity).retryInit()
+            indexViewModel.refreshIndexPage()
         }
     }
 }

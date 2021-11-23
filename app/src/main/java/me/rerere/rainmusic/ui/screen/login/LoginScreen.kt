@@ -26,6 +26,7 @@ import com.vanpra.composematerialdialogs.message
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import com.vanpra.composematerialdialogs.title
 import dev.burnoo.compose.rememberpreference.rememberStringPreference
+import me.rerere.rainmusic.MainActivity
 import me.rerere.rainmusic.R
 import me.rerere.rainmusic.ui.component.RainTopBar
 import me.rerere.rainmusic.ui.local.LocalNavController
@@ -108,6 +109,7 @@ private fun Body(
                     inclusive = true
                 }
             }
+            (context as MainActivity).retryInit()
         }
     }
 

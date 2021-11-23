@@ -139,7 +139,6 @@ class MainActivity : ComponentActivity() {
         }.onEach {
             if (it.first is DataState.Error) {
                 toast("未登录!")
-                CookieHelper.logout()
             }
 
             if (it.second is DataState.Success) {
@@ -153,5 +152,9 @@ class MainActivity : ComponentActivity() {
         }.onCompletion {
             preparingData = false
         }.launchIn(lifecycleScope)
+    }
+
+    fun retryInit(){
+        init()
     }
 }
