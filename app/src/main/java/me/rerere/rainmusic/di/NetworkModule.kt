@@ -5,10 +5,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
+import me.rerere.rainmusic.retrofit.eapi.NeteaseMusicEApi
 import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
 import me.rerere.rainmusic.util.okhttp.CookieHelper
+import me.rerere.rainmusic.util.okhttp.RetryHelper
 import me.rerere.rainmusic.util.okhttp.UserAgentInterceptor
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -22,9 +26,10 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideHttpClient() = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(10, TimeUnit.SECONDS)
-        .writeTimeout(10, TimeUnit.SECONDS)
+        .connectTimeout(15, TimeUnit.SECONDS)
+        .readTimeout(5, TimeUnit.SECONDS)
+        .writeTimeout(5, TimeUnit.SECONDS)
+        .addInterceptor(RetryHelper())
         .addInterceptor(UserAgentInterceptor()) // user-agent 拦截
         .cookieJar(CookieHelper) // cookie
         .build()
@@ -54,4 +59,13 @@ object NetworkModule {
     ): NeteaseMusicApi = retrofit.create(
         NeteaseMusicApi::class.java
     )
+
+    @Singleton
+    @Provides
+    fun provideNeteaseEApi(okHttpClient: OkHttpClient): NeteaseMusicEApi = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl("https://interface3.music.163.com")
+        .client(okHttpClient)
+        .build()
+        .create(NeteaseMusicEApi::class.java)
 }

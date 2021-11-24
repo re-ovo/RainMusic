@@ -24,6 +24,9 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import coil.ImageLoader
+import coil.compose.LocalImageLoader
+import coil.request.CachePolicy
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -55,12 +58,15 @@ import me.rerere.rainmusic.ui.theme.RainMusicTheme
 import me.rerere.rainmusic.util.*
 import me.rerere.rainmusic.util.okhttp.CookieHelper
 import okhttp3.*
+import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userRepo: UserRepo
+    @Inject
+    lateinit var okHttpClient: OkHttpClient
 
     var preparingData = true
     var userData by mutableStateOf(UserData.VISITOR)
@@ -91,7 +97,11 @@ class MainActivity : ComponentActivity() {
                         // 全局提供NavController
                         LocalNavController provides navController,
                         // 全局提供用户账号信息
-                        LocalUserData provides userData
+                        LocalUserData provides userData,
+                        // Coil
+                        LocalImageLoader provides ImageLoader.Builder(this)
+                            .okHttpClient(okHttpClient)
+                            .build()
                     ) {
                         AnimatedNavHost(
                             modifier = Modifier.fillMaxSize(),

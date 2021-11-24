@@ -18,7 +18,7 @@ class AppContext : Application() {
             channelId = "music",
             name = "音乐播放器通知栏组件", // TODO: 本地化
             description = "请勿禁用该通知", // TODO: 本地化
-            importance = NotificationManager.IMPORTANCE_HIGH
+            importance = NotificationManager.IMPORTANCE_DEFAULT
         )
     }
 

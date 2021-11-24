@@ -47,6 +47,7 @@ import me.rerere.rainmusic.util.okhttp.CookieHelper
 fun IndexScreen(
     indexViewModel: IndexViewModel = hiltViewModel()
 ) {
+    val navController = LocalNavController.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val pagerState = rememberPagerState()
     val scaffoldState = rememberScaffoldState()
@@ -64,6 +65,13 @@ fun IndexScreen(
             BottomNavigationBar(
                 pagerState = pagerState
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                Screen.Player.navigate(navController)
+            }) {
+                Icon(Icons.Rounded.QueueMusic, null)
+            }
         }
     ) {
         Column {
@@ -155,6 +163,7 @@ private fun IndexTopBar(
             }) {
                 Text(text = "注销登录 (测试)")
             }
+
             IconButton(onClick = {
                 navController.navigate(Screen.Search.route)
             }) {

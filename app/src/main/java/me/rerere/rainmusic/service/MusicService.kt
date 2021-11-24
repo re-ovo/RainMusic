@@ -1,66 +1,41 @@
 package me.rerere.rainmusic.service
 
 import android.app.PendingIntent
-import android.app.Service
 import android.content.Intent
-import android.os.Binder
-import android.os.IBinder
-import android.widget.RemoteViews
-import androidx.core.app.NotificationCompat
-import me.rerere.rainmusic.AppContext
+import android.net.Uri
+import androidx.media3.common.*
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.MediaLibraryService
+import androidx.media3.session.MediaSession
+import androidx.media3.session.MediaSessionService
 import me.rerere.rainmusic.MainActivity
-import me.rerere.rainmusic.R
 
-/**
- * 音乐播放服务
- */
-class MusicService : Service() {
-    private val binder = MusicBinder()
+class MusicService : MediaSessionService() {
+    lateinit var player: Player
+    lateinit var mediaSession: MediaSession
 
     override fun onCreate() {
         super.onCreate()
 
-        val notification = NotificationCompat.Builder(this, "music")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setCustomContentView(
-                RemoteViews(AppContext.instance.packageName, R.layout.music_player).apply {
-                    setTextViewText(
-                        R.id.musicName,
-                        "音乐标题"
-                    )
-                }
-            )
-            .setShowWhen(false)
-            .setContentIntent(
-                PendingIntent.getActivity(
-                    this,
-                    0,
-                    Intent(
-                        this,
-                        MainActivity::class.java
-                    ),
-                    PendingIntent.FLAG_IMMUTABLE
-                )
-            ).build()
+        player = ExoPlayer.Builder(this)
+            .setAudioAttributes(AudioAttributes.DEFAULT, true)
+            .setHandleAudioBecomingNoisy(true)
+            .setWakeMode(C.WAKE_MODE_LOCAL)
+            .build()
 
-        startForeground(
-            1,
-            notification
-        )
+        mediaSession = MediaSession.Builder(this, player)
+            .setSessionActivity(PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE))
+            .build()
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        println("服务已启动: ${this.toString()}")
-        stopForeground(false)
-        return super.onStartCommand(intent, flags, startId)
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession {
+        return mediaSession
     }
 
-    override fun onBind(intent: Intent): IBinder {
-        return this.binder
-    }
+    override fun onDestroy() {
+        player.release()
+        mediaSession.release()
 
-    inner class MusicBinder : Binder() {
-        val musicService: MusicService
-            get() = this@MusicService
+        super.onDestroy()
     }
 }

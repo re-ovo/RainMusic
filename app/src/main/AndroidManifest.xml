@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".AppContext"
@@ -15,10 +16,14 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.RainMusic">
 
-        <service
-            android:name=".service.MusicService"
-            android:enabled="true"
-            android:exported="true" />
+        <service android:name=".service.MusicService" android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.media3.session.MediaLibraryService" />
+
+                <!-- 兼容旧版本media库 -->
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name=".MainActivity"
@@ -29,7 +34,6 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
