@@ -3,7 +3,8 @@ package me.rerere.rainmusic
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
@@ -44,6 +45,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userRepo: UserRepo
+
     @Inject
     lateinit var okHttpClient: OkHttpClient
 
@@ -86,8 +88,32 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             startDestination = "index",
                             enterTransition = defaultEnterTransition,
-                            exitTransition = defaultExitTransition,
-                            popEnterTransition = defaultPopEnterTransition,
+                            exitTransition = {
+                                if (targetState.destination.route == Screen.Player.route) {
+                                    fadeOut()
+                                } else {
+                                    slideOutHorizontally(
+                                        targetOffsetX = {
+                                            -it
+                                        },
+                                        animationSpec = tween()
+                                    ) + fadeOut(
+                                        animationSpec = tween()
+                                    )
+                                }
+                            },
+                            popEnterTransition = {
+                                if (initialState.destination.route == Screen.Player.route) {
+                                    fadeIn()
+                                } else {
+                                    slideInHorizontally(
+                                        initialOffsetX = {
+                                            -it
+                                        },
+                                        animationSpec = tween()
+                                    )
+                                }
+                            },
                             popExitTransition = defaultPopExitTransition
                         ) {
                             composable(Screen.Login.route) {
@@ -113,7 +139,25 @@ class MainActivity : ComponentActivity() {
                                 PlaylistScreen(id = it.arguments!!.getLong("id"))
                             }
 
-                            composable(Screen.Player.route){
+                            composable(
+                                route = Screen.Player.route,
+                                enterTransition = {
+                                    slideInVertically(
+                                        initialOffsetY = {
+                                            it
+                                        },
+                                        animationSpec = tween()
+                                    ) + fadeIn()
+                                },
+                                popExitTransition = {
+                                    slideOutVertically(
+                                        targetOffsetY = {
+                                            it
+                                        },
+                                        animationSpec = tween()
+                                    ) + fadeOut()
+                                }
+                            ) {
                                 PlayerScreen()
                             }
                         }
@@ -147,7 +191,7 @@ class MainActivity : ComponentActivity() {
         }.launchIn(lifecycleScope)
     }
 
-    fun retryInit(){
+    fun retryInit() {
         init()
     }
 }
