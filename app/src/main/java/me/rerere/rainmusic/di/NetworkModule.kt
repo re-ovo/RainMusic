@@ -29,7 +29,7 @@ object NetworkModule {
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(5, TimeUnit.SECONDS)
         .writeTimeout(5, TimeUnit.SECONDS)
-        .addInterceptor(RetryHelper())
+        .retryOnConnectionFailure(true)
         .addInterceptor(UserAgentInterceptor()) // user-agent 拦截
         .cookieJar(CookieHelper) // cookie
         .build()
