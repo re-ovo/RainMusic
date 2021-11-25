@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
@@ -124,6 +125,7 @@ private fun PlaylistCard(
                 .size(100.dp),
             painter = painter,
             contentDescription = null,
+            contentScale = ContentScale.FillBounds
         )
         Text(
             text = playlist.name,

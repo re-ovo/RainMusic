@@ -9,10 +9,9 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import me.rerere.rainmusic.MainActivity
 import me.rerere.rainmusic.repo.MusicRepo
 import javax.inject.Inject
@@ -30,7 +29,6 @@ class MusicService : MediaLibraryService() {
         player = ExoPlayer.Builder(this)
             .setAudioAttributes(AudioAttributes.DEFAULT, true)
             .setHandleAudioBecomingNoisy(true)
-            .setWakeMode(C.WAKE_MODE_LOCAL)
             .build()
 
         mediaSession = MediaLibrarySession.Builder(this, player, LibrarySessionCallback())
@@ -48,11 +46,11 @@ class MusicService : MediaLibraryService() {
         super.onDestroy()
     }
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? {
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession {
         return mediaSession
     }
 
-    class CustomMediaItemFiller : MediaSession.MediaItemFiller {
+    inner class CustomMediaItemFiller : MediaSession.MediaItemFiller {
         override fun fillInLocalConfiguration(
             session: MediaSession,
             controller: MediaSession.ControllerInfo,

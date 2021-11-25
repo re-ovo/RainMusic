@@ -2,14 +2,17 @@ package me.rerere.rainmusic.ui.screen.playlist
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowUpward
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.*
@@ -19,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -118,6 +122,31 @@ private fun PlaylistTopBar(
 @Composable
 private fun PlaylistInfo(playlistViewModel: PlaylistViewModel) {
     val playlistDetail by playlistViewModel.playlistDetail.collectAsState()
+    var showPlaylistDetailDialog by remember {
+        mutableStateOf(false)
+    }
+    if(showPlaylistDetailDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showPlaylistDetailDialog = false
+            },
+            title = {
+                Text(text = playlistDetail.readSafely()?.playlist?.name ?: "歌单信息")
+            },
+            text = {
+                SelectionContainer {
+                    Text(text = playlistDetail.readSafely()?.playlist?.description ?: "加载中")
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showPlaylistDetailDialog = false
+                }) {
+                    Text(text = "关闭")
+                }
+            }
+        )
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -133,10 +162,14 @@ private fun PlaylistInfo(playlistViewModel: PlaylistViewModel) {
                 .clip(RoundedCornerShape(8.dp))
                 .shimmerPlaceholder(painter),
             painter = painter,
-            contentDescription = null
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds
         )
 
         Column(
+            modifier = Modifier.clickable {
+                showPlaylistDetailDialog = true
+            },
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
@@ -170,12 +203,21 @@ private fun PlaylistAction(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = {
+            // TODO: Play the playlist
+        }) {
             Text(text = "播放")
         }
 
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(Icons.Rounded.FavoriteBorder, null)
+        IconButton(onClick = {
+            // TODO: Like the playlist
+        }) {
+            val imageVector = if (playlistDetail.readSafely()?.playlist?.subscribed == true) {
+                Icons.Rounded.Favorite
+            } else {
+                Icons.Rounded.FavoriteBorder
+            }
+            Icon(imageVector, null)
         }
 
         Text(
@@ -215,7 +257,7 @@ private fun PlaylistMusic(
                 )
                 Row {
                     Text(
-                        text = track.ar.joinToString(separator = "/") { it.name } + if(track.al.name.isNotBlank()) " - ${track.al.name}" else "",
+                        text = track.ar.joinToString(separator = "/") { it.name } + if (track.al.name.isNotBlank()) " - ${track.al.name}" else "",
                         style = MaterialTheme.typography.labelMedium
                     )
                 }

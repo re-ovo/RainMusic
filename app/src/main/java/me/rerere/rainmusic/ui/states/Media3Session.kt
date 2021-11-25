@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.MoreExecutors
+import javax.inject.Inject
 
 /**
  * 提供对应MediaSessionService的MediaController状态, 未加载完成时
