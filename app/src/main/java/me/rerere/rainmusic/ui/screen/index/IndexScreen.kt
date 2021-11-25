@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
@@ -19,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
@@ -28,7 +26,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
-import me.rerere.rainmusic.MainActivity
+import me.rerere.rainmusic.RouteActivity
 import me.rerere.rainmusic.R
 import me.rerere.rainmusic.ui.component.*
 import me.rerere.rainmusic.ui.local.LocalNavController
@@ -110,7 +108,7 @@ private fun NetworkBanner(
         visible = data is DataState.Error
     ) {
         NetworkIssueBanner {
-            (context as MainActivity).retryInit()
+            (context as RouteActivity).retryInit()
             indexViewModel.refreshIndexPage()
         }
     }

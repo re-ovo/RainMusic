@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.media3.common.*
-import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.ResolvingDataSource
@@ -17,9 +16,7 @@ import androidx.media3.session.MediaSession
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import me.rerere.rainmusic.MainActivity
+import me.rerere.rainmusic.RouteActivity
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.RainMusicProtocol
@@ -57,7 +54,7 @@ class MusicService : MediaLibraryService() {
                 PendingIntent.getActivity(
                     this,
                     0,
-                    Intent(this, MainActivity::class.java),
+                    Intent(this, RouteActivity::class.java),
                     PendingIntent.FLAG_IMMUTABLE
                 )
             )

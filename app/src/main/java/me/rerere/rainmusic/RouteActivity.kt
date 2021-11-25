@@ -42,7 +42,7 @@ import okhttp3.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class RouteActivity : ComponentActivity() {
     @Inject
     lateinit var userRepo: UserRepo
 

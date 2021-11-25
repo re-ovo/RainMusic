@@ -26,7 +26,7 @@
         </service>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".RouteActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true"
             android:launchMode="singleInstance"
