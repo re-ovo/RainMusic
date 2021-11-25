@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
 
-fun currentTime() = System.currentTimeMillis()
+fun now() = System.currentTimeMillis()
 
 @SuppressLint("SimpleDateFormat")
 private val sdf = SimpleDateFormat("yyyy年MM月dd日")

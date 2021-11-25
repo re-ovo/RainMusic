@@ -55,12 +55,11 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.activity:activity-compose:1.4.0'
 
-    // media
+    // media3
     implementation "androidx.media3:media3-session:1.0.0-alpha01"
     implementation "androidx.media3:media3-common:1.0.0-alpha01"
     implementation "androidx.media3:media3-exoplayer:1.0.0-alpha01"
     implementation "androidx.media3:media3-ui:1.0.0-alpha01"
-    implementation "androidx.media3:media3-decoder:1.0.0-alpha01"
 
     // splash screen
     implementation "androidx.core:core-splashscreen:1.0.0-alpha02"

@@ -230,7 +230,7 @@ data class PlaylistDetail(
             @SerializedName("h")
             val h: H,
             @SerializedName("id")
-            val id: Int,
+            val id: Long,
             @SerializedName("l")
             val l: L,
             @SerializedName("m")

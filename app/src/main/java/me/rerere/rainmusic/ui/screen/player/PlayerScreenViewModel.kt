@@ -21,7 +21,7 @@ class PlayerScreenViewModel @Inject constructor(
     private val musicRepo: MusicRepo
 ) : ViewModel(){
     init {
-        loadMusic()
+        // loadMusic()
     }
 
     fun loadMusic() {

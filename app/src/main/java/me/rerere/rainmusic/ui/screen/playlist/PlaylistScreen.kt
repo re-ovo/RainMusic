@@ -1,11 +1,10 @@
 package me.rerere.rainmusic.ui.screen.playlist
 
-import androidx.compose.animation.AnimatedVisibility
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,19 +22,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.launch
 import me.rerere.rainmusic.retrofit.api.model.PlaylistDetail
+import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.PopBackIcon
 import me.rerere.rainmusic.ui.component.RainTopBar
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
-import me.rerere.rainmusic.util.DataState
-import me.rerere.rainmusic.util.format
+import me.rerere.rainmusic.ui.states.rememberMediaSessionPlayer
+import me.rerere.rainmusic.util.RainMusicProtocol
+import me.rerere.rainmusic.util.toast
 
 @ExperimentalMaterial3Api
 @Composable
@@ -196,6 +199,8 @@ private fun PlaylistAction(
     playlistViewModel: PlaylistViewModel
 ) {
     val playlistDetail by playlistViewModel.playlistDetail.collectAsState()
+    val player by rememberMediaSessionPlayer(MusicService::class.java)
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -204,7 +209,33 @@ private fun PlaylistAction(
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Button(onClick = {
-            // TODO: Play the playlist
+            player?.let {
+                it.apply {
+                    stop()
+                    clearMediaItems()
+                    playlistDetail.readSafely()?.playlist?.tracks?.forEach { track ->
+                        println(track)
+                        addMediaItem(
+                            MediaItem.Builder()
+                                .setMediaId(track.id.toString())
+                                .setMediaMetadata(
+                                    MediaMetadata.Builder()
+                                        .setTitle(track.name)
+                                        .setArtist(track.ar.joinToString(", ") { ar -> ar.name })
+                                        .setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${track.id}"))
+                                        .setArtworkUri(Uri.parse(track.al.picUrl))
+                                        .build()
+                                )
+                                .build()
+                        )
+                    }
+                    prepare()
+                    play()
+                    context.toast("开始播放该歌单")
+                }
+            } ?: kotlin.run {
+                context.toast("错误: 无法连接到 MusicService")
+            }
         }) {
             Text(text = "播放")
         }
