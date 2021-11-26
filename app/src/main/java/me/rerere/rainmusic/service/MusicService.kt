@@ -48,6 +48,8 @@ class MusicService : MediaLibraryService() {
             )
             .build()
 
+        player.repeatMode = Player.REPEAT_MODE_ALL
+
         mediaSession = MediaLibrarySession.Builder(this, player, LibrarySessionCallback())
             .setMediaItemFiller(CustomMediaItemFiller())
             .setSessionActivity(

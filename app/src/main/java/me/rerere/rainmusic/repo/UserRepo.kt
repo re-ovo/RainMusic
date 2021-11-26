@@ -64,4 +64,21 @@ class UserRepo @Inject constructor(
             emit(DataState.Error(e))
         }
     }
+
+    fun getLikeList(uid: Long) = flow {
+        emit(DataState.Loading)
+        try {
+            val result = weApi.getLikeList(
+                encryptWeAPI(
+                    mapOf(
+                        "uid" to uid.toString()
+                    )
+                )
+            )
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
 }

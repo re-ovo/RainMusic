@@ -10,10 +10,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.rerere.rainmusic.repo.MusicRepo
+import me.rerere.rainmusic.repo.UserRepo
 import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
 import me.rerere.rainmusic.retrofit.api.model.Lyric
 import me.rerere.rainmusic.retrofit.api.model.MusicDetails
 import me.rerere.rainmusic.retrofit.eapi.NeteaseMusicEApi
+import me.rerere.rainmusic.retrofit.weapi.model.LikeList
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.encrypt.asPostBody
 import me.rerere.rainmusic.util.encrypt.encryptEApi
@@ -24,10 +26,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayerScreenViewModel @Inject constructor(
-    private val musicRepo: MusicRepo
+    private val musicRepo: MusicRepo,
+    private val userRepo: UserRepo
 ) : ViewModel() {
+    val likeList: MutableStateFlow<DataState<LikeList>> = MutableStateFlow(DataState.Empty)
     val musicDetail: MutableStateFlow<DataState<MusicDetails>> = MutableStateFlow(DataState.Empty)
     val lyric: MutableStateFlow<DataState<Lyric>> = MutableStateFlow(DataState.Empty)
+
+    fun loadLikeList(uid: Long){
+        if(uid <= 0){
+            return
+        }
+        userRepo.getLikeList(uid).onEach {
+            likeList.value = it
+        }.launchIn(viewModelScope)
+    }
 
     fun loadMusicDetail(id: Long) {
         if(id == 0L){

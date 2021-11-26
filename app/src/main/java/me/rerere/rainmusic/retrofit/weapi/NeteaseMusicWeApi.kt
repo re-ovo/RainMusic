@@ -1,6 +1,7 @@
 package me.rerere.rainmusic.retrofit.weapi
 
 import com.google.gson.JsonObject
+import me.rerere.rainmusic.retrofit.weapi.model.LikeList
 import me.rerere.rainmusic.retrofit.weapi.model.LoginResponse
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
@@ -49,4 +50,13 @@ interface NeteaseMusicWeApi {
     suspend fun getNewSongs(
         @FieldMap body: Map<String, String>
     ): NewSongs
+
+    /**
+     * 喜欢的歌曲列表
+     */
+    @POST("/weapi/song/like/get")
+    @FormUrlEncoded
+    suspend fun getLikeList(
+        @FieldMap body: Map<String, String>
+    ): LikeList
 }

@@ -9,12 +9,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.Slider
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
@@ -45,12 +49,14 @@ import me.rerere.rainmusic.retrofit.api.model.parse
 import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.PopBackIcon
 import me.rerere.rainmusic.ui.component.RainTopBar
+import me.rerere.rainmusic.ui.local.LocalUserData
 import me.rerere.rainmusic.ui.states.rememberCurrentMediaItem
 import me.rerere.rainmusic.ui.states.rememberMediaSessionPlayer
 import me.rerere.rainmusic.ui.states.rememberPlayProgress
 import me.rerere.rainmusic.ui.states.rememberPlayState
 import me.rerere.rainmusic.util.RainMusicProtocol
 import me.rerere.rainmusic.util.formatAsPlayerTime
+import me.rerere.rainmusic.util.toast
 import kotlin.math.roundToLong
 import kotlin.random.Random
 
@@ -61,6 +67,11 @@ fun PlayerScreen(
 ) {
     val context = LocalContext.current
     val player by rememberMediaSessionPlayer(MusicService::class.java)
+    val userData = LocalUserData.current
+    LaunchedEffect(userData){
+        playerScreenViewModel.loadLikeList(userData.id)
+    }
+
     when (player) {
         null -> {
             NotConnectScreen()
@@ -114,6 +125,7 @@ private fun PlayerUI(
         }
     }
     val musicDetail by playerScreenViewModel.musicDetail.collectAsState()
+    val userData = LocalUserData.current
 
     LaunchedEffect(currentMediaItem) {
         playerScreenViewModel.loadMusicDetail(currentMediaItem?.mediaId?.toLong() ?: 0L)
@@ -188,10 +200,36 @@ private fun PlayerUI(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(
-                        32.dp,
+                        16.dp,
                         Alignment.CenterHorizontally
                     )
                 ) {
+                    var show by remember {
+                        mutableStateOf(false)
+                    }
+                    DropdownMenu(
+                        expanded = show,
+                        onDismissRequest = { show = false }
+                    ) {
+                        DropdownMenuItem(onClick = {
+                            show = false
+                            player.repeatMode = Player.REPEAT_MODE_ONE
+                        }) {
+                            Text(text = "单曲循环")
+                        }
+                        DropdownMenuItem(onClick = {
+                            show = false
+                            player.repeatMode = Player.REPEAT_MODE_ALL
+                        }) {
+                            Text(text = "列表循环")
+                        }
+                    }
+                    IconButton(onClick = {
+                       show = true
+                    }) {
+                        Icon(Icons.Rounded.Repeat, null)
+                    }
+
                     IconButton(onClick = {
                         player.seekToPreviousMediaItem()
                     }) {
@@ -208,7 +246,7 @@ private fun PlayerUI(
                         }
                     ) {
                         Icon(
-                            modifier = Modifier.size(80.dp),
+                            modifier = Modifier.size(60.dp),
                             imageVector = if (isPlaying == true) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
                             contentDescription = null
                         )
@@ -220,10 +258,18 @@ private fun PlayerUI(
                         Icon(Icons.Rounded.SkipNext, null)
                     }
 
+                    val likeList by playerScreenViewModel.likeList.collectAsState()
                     IconButton(onClick = {
-                        println(musicDetail.readSafely())
+                        context.toast("还没写")
                     }) {
-                        Icon(Icons.Rounded.FavoriteBorder, null)
+                        Icon(
+                            imageVector = if(likeList.readSafely()?.ids?.contains(currentMediaItem?.mediaId?.toLong() ?: 0) == true) {
+                                Icons.Rounded.Favorite
+                            } else {
+                                Icons.Rounded.FavoriteBorder
+                            },
+                            contentDescription = null
+                        )
                     }
                 }
             }
