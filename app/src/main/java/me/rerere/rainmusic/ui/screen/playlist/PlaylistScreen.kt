@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import androidx.media3.common.Player
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.PopBackIcon
 import me.rerere.rainmusic.ui.component.RainTopBar
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
+import me.rerere.rainmusic.ui.states.asyncGetSessionPlayer
 import me.rerere.rainmusic.ui.states.rememberMediaSessionPlayer
 import me.rerere.rainmusic.util.RainMusicProtocol
 import me.rerere.rainmusic.util.toast
@@ -199,7 +201,6 @@ private fun PlaylistAction(
     playlistViewModel: PlaylistViewModel
 ) {
     val playlistDetail by playlistViewModel.playlistDetail.collectAsState()
-    val player by rememberMediaSessionPlayer(MusicService::class.java)
     val context = LocalContext.current
     Row(
         modifier = Modifier
@@ -209,7 +210,7 @@ private fun PlaylistAction(
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Button(onClick = {
-            player?.let {
+            context.asyncGetSessionPlayer(MusicService::class.java){
                 it.apply {
                     stop()
                     clearMediaItems()
@@ -233,15 +234,13 @@ private fun PlaylistAction(
                     play()
                     context.toast("开始播放该歌单")
                 }
-            } ?: kotlin.run {
-                context.toast("错误: 无法连接到 MusicService")
             }
         }) {
             Text(text = "播放")
         }
 
         IconButton(onClick = {
-            // TODO: Like the playlist
+
         }) {
             val imageVector = if (playlistDetail.readSafely()?.playlist?.subscribed == true) {
                 Icons.Rounded.Favorite
@@ -265,6 +264,7 @@ private fun PlaylistMusic(
     index: Int,
     track: PlaylistDetail.Playlist.Track
 ) {
+    val context = LocalContext.current
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -294,7 +294,29 @@ private fun PlaylistMusic(
                 }
             }
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                context.asyncGetSessionPlayer(MusicService::class.java){
+                    it.apply {
+                        stop()
+                        clearMediaItems()
+                        addMediaItem(
+                            MediaItem.Builder()
+                                .setMediaId(track.id.toString())
+                                .setMediaMetadata(
+                                    MediaMetadata.Builder()
+                                        .setTitle(track.name)
+                                        .setArtist(track.ar.joinToString(", ") { ar -> ar.name })
+                                        .setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${track.id}"))
+                                        .setArtworkUri(Uri.parse(track.al.picUrl))
+                                        .build()
+                                )
+                                .build()
+                        )
+                        prepare()
+                        play()
+                    }
+                }
+            }) {
                 Icon(Icons.Rounded.PlayArrow, null)
             }
         }

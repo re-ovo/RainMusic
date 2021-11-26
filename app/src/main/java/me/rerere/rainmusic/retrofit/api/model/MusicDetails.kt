@@ -102,13 +102,13 @@ data class MusicDetails(
         @SerializedName("h")
         val h: H,
         @SerializedName("id")
-        val id: Int,
+        val id: Long,
         @SerializedName("l")
         val l: L,
         @SerializedName("m")
         val m: M,
         @SerializedName("mark")
-        val mark: Int,
+        val mark: Long,
         @SerializedName("mst")
         val mst: Int,
         @SerializedName("mv")

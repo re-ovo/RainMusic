@@ -114,4 +114,22 @@ class MusicRepo @Inject constructor(
             emit(DataState.Error(e))
         }
     }
+
+    fun getLyric(id: Long)= flow {
+        emit(DataState.Loading)
+        try {
+            val result = api.getLyric(
+                mapOf(
+                    "id" to id.toString(),
+                    "lv" to "-1",
+                    "kv" to "-1",
+                    "tv" to "-1"
+                )
+            )
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
 }

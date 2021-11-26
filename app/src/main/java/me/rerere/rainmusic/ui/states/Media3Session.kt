@@ -1,6 +1,7 @@
 package me.rerere.rainmusic.ui.states
 
 import android.content.ComponentName
+import android.content.Context
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -42,4 +43,21 @@ fun rememberMediaSessionPlayer(clazz: Class<out Any>): State<MediaController?> {
         }
     }
     return controller
+}
+
+fun Context.asyncGetSessionPlayer(clazz: Class<out Any>, handler: (MediaController) -> Unit) {
+    val controller = MediaController.Builder(
+        this,
+        SessionToken(
+            this,
+            ComponentName(
+                this,
+                clazz
+            )
+        )
+    ).buildAsync()
+
+    controller.addListener({
+         handler(controller.get())
+    }, MoreExecutors.directExecutor())
 }

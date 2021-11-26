@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
+import me.rerere.rainmusic.retrofit.api.model.Lyric
 import me.rerere.rainmusic.retrofit.api.model.MusicDetails
 import me.rerere.rainmusic.retrofit.eapi.NeteaseMusicEApi
 import me.rerere.rainmusic.util.DataState
@@ -26,15 +27,23 @@ class PlayerScreenViewModel @Inject constructor(
     private val musicRepo: MusicRepo
 ) : ViewModel() {
     val musicDetail: MutableStateFlow<DataState<MusicDetails>> = MutableStateFlow(DataState.Empty)
+    val lyric: MutableStateFlow<DataState<Lyric>> = MutableStateFlow(DataState.Empty)
 
     fun loadMusicDetail(id: Long) {
         if(id == 0L){
             musicDetail.value = DataState.Empty
+            lyric.value = DataState.Empty
             return
         }
+
         musicRepo.getMusicDetail(id)
             .onEach {
                 musicDetail.value = it
+            }.launchIn(viewModelScope)
+
+        musicRepo.getLyric(id)
+            .onEach {
+                lyric.value = it
             }.launchIn(viewModelScope)
     }
 }

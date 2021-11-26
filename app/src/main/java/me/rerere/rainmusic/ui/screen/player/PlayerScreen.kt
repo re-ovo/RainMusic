@@ -1,10 +1,16 @@
 package me.rerere.rainmusic.ui.screen.player
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.Slider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
@@ -18,9 +24,14 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
@@ -29,6 +40,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.isActive
+import me.rerere.rainmusic.retrofit.api.model.LyricLine
+import me.rerere.rainmusic.retrofit.api.model.parse
 import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.PopBackIcon
 import me.rerere.rainmusic.ui.component.RainTopBar
@@ -36,8 +49,10 @@ import me.rerere.rainmusic.ui.states.rememberCurrentMediaItem
 import me.rerere.rainmusic.ui.states.rememberMediaSessionPlayer
 import me.rerere.rainmusic.ui.states.rememberPlayProgress
 import me.rerere.rainmusic.ui.states.rememberPlayState
+import me.rerere.rainmusic.util.RainMusicProtocol
 import me.rerere.rainmusic.util.formatAsPlayerTime
 import kotlin.math.roundToLong
+import kotlin.random.Random
 
 @ExperimentalMaterial3Api
 @Composable
@@ -84,6 +99,7 @@ private fun PlayerUI(
     player: Player,
     playerScreenViewModel: PlayerScreenViewModel
 ) {
+    val context = LocalContext.current
     val pagerState = rememberPagerState()
     val currentMediaItem = rememberCurrentMediaItem(player)
     val progress = rememberPlayProgress(player)
@@ -117,13 +133,13 @@ private fun PlayerUI(
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = currentMediaItem?.mediaMetadata?.title.toString(),
+                        text = currentMediaItem?.mediaMetadata?.title?.toString() ?: "暂未播放",
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleLarge
                     )
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = currentMediaItem?.mediaMetadata?.artist.toString(),
+                        text = currentMediaItem?.mediaMetadata?.artist?.toString() ?: "暂未播放",
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodySmall
                     )
@@ -146,9 +162,7 @@ private fun PlayerUI(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    val percent: Float = remember(progress) {
-                        progress?.let { (it.first * 100f / it.second) / 100f } ?: 0f
-                    }
+                    val percent: Float = progress?.let { (it.first * 100f / it.second) / 100f } ?: 0f
 
                     Text(text = progress?.first?.formatAsPlayerTime() ?: "00:00")
                     var valueChanger by remember(percent) {
@@ -205,6 +219,12 @@ private fun PlayerUI(
                     }) {
                         Icon(Icons.Rounded.SkipNext, null)
                     }
+
+                    IconButton(onClick = {
+                        println(musicDetail.readSafely())
+                    }) {
+                        Icon(Icons.Rounded.FavoriteBorder, null)
+                    }
                 }
             }
         },
@@ -227,9 +247,9 @@ private fun PlayerUI(
                         Image(
                             modifier = Modifier
                                 .rotate(rotator)
+                                .clip(CircleShape)
                                 .fillMaxWidth(0.5f)
                                 .aspectRatio(1f)
-                                .clip(CircleShape)
                                 .background(Color.Black),
                             painter = rememberImagePainter(
                                 data = musicDetail.readSafely()?.songs?.get(0)?.al?.picUrl
@@ -247,18 +267,76 @@ private fun PlayerUI(
                             .padding(16.dp),
                         contentAlignment = Alignment.Center
                     ) {
+                        val lyric by playerScreenViewModel.lyric.collectAsState()
+                        val lyricLines = lyric.readSafely()?.parse()
+                        val listState = rememberLazyListState()
+
+                        var currentLyricIndex by remember {
+                            mutableStateOf(0)
+                        }
+
+
+                        LaunchedEffect(progress) {
+                            lyricLines?.let { lines ->
+                                val currentLyric = (progress?.first?.div(1000) ?: 0).toInt()
+                                val index = lines.indexOfFirst { lyric ->
+                                    lyric.time == currentLyric
+                                }
+                                index.takeIf { i -> i >= 0 }?.let { i ->
+                                    listState.animateScrollToItem(i)
+                                    currentLyricIndex = i
+                                }
+                            }
+                        }
                         LazyColumn(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            state = listState
                         ) {
-                            items(10) {
-                                Text(text = "歌词系统，还没写")
+                            if (lyricLines?.isEmpty() != false) {
+                                item {
+                                    Text(text = "没有歌词")
+                                }
+                            }
+
+                            lyric.readSafely()?.parse()?.let { lines ->
+                                itemsIndexed(lines) { index, item ->
+                                    LyricItem(item, currentLyricIndex == index)
+                                }
                             }
                         }
                     }
                 }
             }
+        }
+    }
+}
+
+/**
+ * 歌词Item组件
+ *
+ * @param lyricLine 歌词数据
+ * @param currentLyric 是否为当前歌词, 需要放大高亮显示
+ */
+@Composable
+private fun LyricItem(lyricLine: LyricLine, currentLyric: Boolean = false) {
+    Column(
+        modifier = Modifier.padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = lyricLine.lyric,
+            fontWeight = if (currentLyric) FontWeight.Bold else LocalTextStyle.current.fontWeight,
+            style = if (currentLyric) MaterialTheme.typography.bodyLarge else MaterialTheme.typography.bodyMedium
+        )
+        lyricLine.translation?.let {
+            Text(
+                text = it,
+                fontWeight = if (currentLyric) FontWeight.Bold else LocalTextStyle.current.fontWeight,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }
