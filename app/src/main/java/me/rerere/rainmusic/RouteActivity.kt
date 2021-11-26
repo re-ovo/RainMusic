@@ -7,7 +7,10 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.*
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -26,10 +29,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import me.rerere.rainmusic.model.UserData
 import me.rerere.rainmusic.repo.UserRepo
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.local.LocalUserData
-import me.rerere.rainmusic.ui.local.UserData
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexScreen
 import me.rerere.rainmusic.ui.screen.login.LoginScreen
@@ -37,8 +40,11 @@ import me.rerere.rainmusic.ui.screen.player.PlayerScreen
 import me.rerere.rainmusic.ui.screen.playlist.PlaylistScreen
 import me.rerere.rainmusic.ui.screen.search.SearchScreen
 import me.rerere.rainmusic.ui.theme.RainMusicTheme
-import me.rerere.rainmusic.util.*
-import okhttp3.*
+import me.rerere.rainmusic.util.DataState
+import me.rerere.rainmusic.util.defaultEnterTransition
+import me.rerere.rainmusic.util.defaultPopExitTransition
+import me.rerere.rainmusic.util.toast
+import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 @AndroidEntryPoint

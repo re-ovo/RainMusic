@@ -1,8 +1,8 @@
 package me.rerere.rainmusic.ui.component
 
 import androidx.compose.runtime.Composable
+import me.rerere.rainmusic.model.UserData
 import me.rerere.rainmusic.ui.local.LocalUserData
-import me.rerere.rainmusic.ui.local.UserData
 
 /**
  * 只在登录后显示的内容

@@ -26,8 +26,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
-import me.rerere.rainmusic.RouteActivity
 import me.rerere.rainmusic.R
+import me.rerere.rainmusic.RouteActivity
 import me.rerere.rainmusic.ui.component.*
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.local.LocalUserData

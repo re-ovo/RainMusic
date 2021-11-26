@@ -1,6 +1,8 @@
 package me.rerere.rainmusic.retrofit.api
 
+import com.google.gson.JsonObject
 import me.rerere.rainmusic.retrofit.api.model.AccountDetail
+import me.rerere.rainmusic.retrofit.api.model.MusicDetails
 import me.rerere.rainmusic.retrofit.api.model.PlaylistDetail
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
@@ -22,4 +24,10 @@ interface NeteaseMusicApi {
     suspend fun getPlaylistDetail(
         @FieldMap body: Map<String, String>
     ): PlaylistDetail
+
+    @POST("/api/v3/song/detail")
+    @FormUrlEncoded
+    suspend fun getMusicDetail(
+        @FieldMap body: Map<String, String>
+    ): MusicDetails
 }

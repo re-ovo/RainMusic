@@ -13,7 +13,7 @@ class MusicRepo @Inject constructor(
     private val api: NeteaseMusicApi,
     private val eApi: NeteaseMusicEApi,
     private val weApi: NeteaseMusicWeApi
-){
+) {
     fun getPersonalizedPlaylist(
         limit: Int = 10
     ) = flow {
@@ -29,7 +29,7 @@ class MusicRepo @Inject constructor(
                 )
             )
             emit(DataState.Success(result))
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             emit(DataState.Error(e))
         }
@@ -51,7 +51,7 @@ class MusicRepo @Inject constructor(
                 )
             )
             emit(DataState.Success(result))
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             emit(DataState.Error(e))
         }
@@ -70,7 +70,7 @@ class MusicRepo @Inject constructor(
                 )
             )
             emit(DataState.Success(result))
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             emit(DataState.Error(e))
         }
@@ -92,7 +92,24 @@ class MusicRepo @Inject constructor(
                 )
             )
             emit(DataState.Success(result))
-        }catch (e: Exception){
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
+
+    fun getMusicDetail(
+        id: Long
+    ) = flow {
+        emit(DataState.Loading)
+        try {
+            val result = api.getMusicDetail(
+                mapOf(
+                    "c" to "[{\"id\":$id}]"
+                )
+            )
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
             e.printStackTrace()
             emit(DataState.Error(e))
         }

@@ -15,6 +15,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
@@ -108,12 +109,14 @@ fun RainBottomNavigation(
  * 点击返回上一级的按钮
  */
 @Composable
-fun PopBackIcon(){
+fun PopBackIcon(
+    icon: ImageVector = Icons.Rounded.ArrowBack
+){
     val navController = LocalNavController.current
     IconButton(onClick = {
         navController.popBackStack()
     }) {
-        Icon(Icons.Rounded.ArrowBack, "Back")
+        Icon(icon, "Back")
     }
 }
 
