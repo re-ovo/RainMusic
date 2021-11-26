@@ -22,6 +22,11 @@ RainMusic是一个使用Jetpack Compose构建的网易云第三方app, 采用Mat
 * 每日推荐
 * 自动签到
 
+## 🖼️ 截图展示
+| 主页 | 播放器 | 歌词 |
+| ----- | ------| ------|
+| <img src="art/index.png" align="left" height="400">| <img src="art/player.png" align="left" height="400">| <img src="art/lyric.png" align="left" height="400"> |
+
 ## 📭 常见问题
 1. **有没有iOS版?**   
    答: 当然没有，用iOS就和小众app说再见吧
