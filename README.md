@@ -4,8 +4,8 @@
 [![GitHub stars](https://img.shields.io/github/stars/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/stargazers)
 [![GitHub license](https://img.shields.io/github/license/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/blob/master/LICENSE)
 
-RainMusic是一个使用 [Jetpack Compose](https://developer.android.com/jetpack/compose) 构建的网易云第三方app, 采用Material You设计，专注听歌功能，没有社交功能，还你一个纯净的音乐APP。   
-APP完全采用Compose构建UI，采用Kotlin Flow驱动数据, 使用MVVM架构，使用Media3完成播放器服务, 目的是为了实践安卓最前沿的开发技术栈。当然APP中存在许多可改进的地方，欢迎提交PR帮助改进代码和架构！
+RainMusic是一个使用 [Jetpack Compose](https://developer.android.com/jetpack/compose) 构建的网易云第三方app, 采用Material You设计，专注听歌功能，没有社交功能，还你一个纯净的音乐APP。
+APP完全采用Compose构建UI，采用 Kotlin Flow 驱动数据, 使用MVVM架构，使用 [Media3](https://github.com/androidx/media) 完成播放器服务, 目的是为了实践安卓最前沿的开发技术栈。当然APP中存在许多可改进的地方，欢迎提交PR帮助改进代码和架构！
 
 ## 📦️ 下载安装包
 * 开发中，暂时不提供下载，感兴趣的可以自行编译试用
