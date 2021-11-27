@@ -20,6 +20,8 @@ import me.rerere.rainmusic.RouteActivity
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.RainMusicProtocol
+import me.rerere.rainmusic.util.okhttp.https
+import java.io.IOException
 import javax.inject.Inject
 
 private const val TAG = "MusicService"
@@ -108,10 +110,13 @@ class MusicService : MediaLibraryService() {
                     musicUrl
                 }
                 Log.i(TAG, "resolveDataSpec: 解析完成: $url")
+                if(url.isBlank()){
+                    throw IOException("无法解析Music URL")
+                }
                 return dataSpec.buildUpon()
                     .apply {
                         if(url.isNotBlank()){
-                            setUri(Uri.parse(url))
+                            setUri(Uri.parse(url.https))
                         }
                     }
                     .build()

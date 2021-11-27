@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RainMusic"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="false">
 
         <service
             android:name=".service.MusicService"

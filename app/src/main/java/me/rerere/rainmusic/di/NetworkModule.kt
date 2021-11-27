@@ -8,6 +8,7 @@ import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
 import me.rerere.rainmusic.retrofit.eapi.NeteaseMusicEApi
 import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
 import me.rerere.rainmusic.util.okhttp.CookieHelper
+import me.rerere.rainmusic.util.okhttp.EnsureHttpsInterceptor
 import me.rerere.rainmusic.util.okhttp.RetryHelper
 import me.rerere.rainmusic.util.okhttp.UserAgentInterceptor
 import okhttp3.Interceptor
@@ -30,6 +31,7 @@ object NetworkModule {
         .readTimeout(5, TimeUnit.SECONDS)
         .writeTimeout(5, TimeUnit.SECONDS)
         .retryOnConnectionFailure(true)
+        .addInterceptor(EnsureHttpsInterceptor())
         .addInterceptor(UserAgentInterceptor()) // user-agent 拦截
         .cookieJar(CookieHelper) // cookie
         .build()

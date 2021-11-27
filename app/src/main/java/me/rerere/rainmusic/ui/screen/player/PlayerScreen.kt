@@ -307,7 +307,7 @@ private fun PlayerUI(
 
                 // 歌词
                 1 -> {
-                    Box(
+                    BoxWithConstraints(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(16.dp),
@@ -320,7 +320,6 @@ private fun PlayerUI(
                         var currentLyricIndex by remember {
                             mutableStateOf(0)
                         }
-
 
                         LaunchedEffect(progress) {
                             lyricLines?.let { lines ->
