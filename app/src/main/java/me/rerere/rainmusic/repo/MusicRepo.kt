@@ -132,4 +132,15 @@ class MusicRepo @Inject constructor(
             emit(DataState.Error(e))
         }
     }
+
+    fun getTopList() = flow {
+        emit(DataState.Loading)
+        try {
+            val result = api.getAllTopList()
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
 }

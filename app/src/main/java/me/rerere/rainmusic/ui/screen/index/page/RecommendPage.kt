@@ -8,6 +8,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Radio
+import androidx.compose.material.icons.rounded.Recommend
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,8 +39,11 @@ import me.rerere.rainmusic.util.okhttp.https
 fun IndexPage(
     indexViewModel: IndexViewModel
 ) {
-    LaunchedEffect(LocalUserData.current){
-        indexViewModel.refreshIndexPage()
+    val recommendStatus by indexViewModel.personalizedPlaylist.collectAsState()
+    LaunchedEffect(LocalUserData.current) {
+        if(recommendStatus !is DataState.Success) {
+            indexViewModel.refreshIndexPage()
+        }
     }
 
     LazyColumn(
@@ -55,6 +61,10 @@ fun IndexPage(
 
         item {
             NewSongs(indexViewModel)
+        }
+
+        item {
+            Toplist(indexViewModel)
         }
     }
 }
@@ -149,50 +159,51 @@ fun LargeButton() {
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(text = "为你准备的", style = MaterialTheme.typography.headlineSmall)
-        Surface(
-            shape = RoundedCornerShape(12.dp),
-            tonalElevation = 8.dp
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Row(
+            Surface(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    .weight(1f),
+                tonalElevation = 12.dp,
+                shape = RoundedCornerShape(8.dp)
             ) {
-                Surface(
+                Row(
                     modifier = Modifier
-                        .clickable {
-
-                        }
-                        .aspectRatio(2f)
-                        .weight(1f),
-                    tonalElevation = 12.dp,
-                    shape = RoundedCornerShape(8.dp)
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(
-                            text = "私人FM",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    }
+                    Icon(Icons.Rounded.Radio, null)
+                    Text(
+                        text = "私人FM",
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 }
+            }
 
-                Surface(
+            Surface(
+                modifier = Modifier
+                    .weight(1f),
+                tonalElevation = 12.dp,
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Row(
                     modifier = Modifier
-                        .clickable {
-
-                        }
-                        .aspectRatio(2f)
-                        .weight(1f),
-                    tonalElevation = 12.dp,
-                    shape = RoundedCornerShape(8.dp)
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(
-                            text = "每日推荐",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    }
+                    Icon(Icons.Rounded.Recommend, null)
+                    Text(
+                        text = "每日推荐",
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 }
             }
         }
@@ -269,5 +280,67 @@ private fun PsSongCard(
             style = MaterialTheme.typography.labelMedium,
             maxLines = 1
         )
+    }
+}
+
+@Composable
+private fun Toplist(indexViewModel: IndexViewModel) {
+    val toplist by indexViewModel.toplist.collectAsState()
+    val navController = LocalNavController.current
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(text = "榜单", style = MaterialTheme.typography.headlineSmall)
+        Surface(
+            shape = RoundedCornerShape(12.dp),
+            tonalElevation = 8.dp
+        ) {
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                when (toplist) {
+                    is DataState.Success -> {
+                        items(toplist.read().list) { item ->
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.clickable {
+                                    Screen.Playlist.navigate(navController){
+                                        "$it/${item.id}"
+                                    }
+                                }
+                            ) {
+                                val painter = rememberImagePainter(data = item.coverImgUrl)
+                                Image(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .shimmerPlaceholder(painter)
+                                        .size(100.dp),
+                                    painter = painter,
+                                    contentDescription = null,
+                                )
+                                Text(
+                                    text = item.name,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    maxLines = 1
+                                )
+                            }
+                        }
+                    }
+                    is DataState.Loading -> {
+                        items(5) {
+                            Box(
+                                modifier = Modifier
+                                    .shimmerPlaceholder(true)
+                                    .size(100.dp)
+                            )
+                        }
+                    }
+                    else -> {}
+                }
+            }
+        }
     }
 }
