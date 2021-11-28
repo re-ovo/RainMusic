@@ -63,15 +63,3 @@ fun rememberPlayState(player: Player?): Boolean? {
     }
     return isPlayingState
 }
-
-fun Player.startPersonalFM(start: Boolean = true) {
-    stop()
-    clearMediaItems()
-    addMediaItem(
-        MusicInfo.PersonalFM.toMediaItem()
-    )
-    prepare()
-    if (start) {
-        play()
-    }
-}

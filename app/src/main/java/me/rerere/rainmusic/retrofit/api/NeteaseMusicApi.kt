@@ -49,6 +49,15 @@ interface NeteaseMusicApi {
         @FieldMap body: Map<String, String>
     ): UserPlaylists
 
+    /**
+     * 获取榜单
+     */
     @GET("/api/toplist")
     suspend fun getAllTopList(): Toplists
+
+    /**
+     * 每日推荐歌曲
+     */
+    @GET("/api/v3/discovery/recommend/songs")
+    suspend fun getDailyRecommendSongList(): DailyRecommendSongs
 }

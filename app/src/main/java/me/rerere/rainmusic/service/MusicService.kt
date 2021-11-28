@@ -111,7 +111,15 @@ class MusicService : MediaLibraryService() {
                 }
                 Log.i(TAG, "resolveDataSpec: 解析完成: $url")
                 if(url.isBlank()){
-                    throw IOException("无法解析Music URL")
+                    lifecycleScope.launch {
+                        if (player.hasNextMediaItem()) {
+                            player.seekToNextMediaItem()
+                            player.prepare()
+                            player.play()
+                        } else {
+                            throw IOException("无法解析Music URL")
+                        }
+                    }
                 }
                 return dataSpec.buildUpon()
                     .apply {

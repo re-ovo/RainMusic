@@ -40,6 +40,8 @@ import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.states.asyncGetSessionPlayer
 import me.rerere.rainmusic.ui.states.rememberMediaSessionPlayer
 import me.rerere.rainmusic.util.RainMusicProtocol
+import me.rerere.rainmusic.util.media.buildMediaItem
+import me.rerere.rainmusic.util.media.metadata
 import me.rerere.rainmusic.util.toast
 
 @ExperimentalMaterial3Api
@@ -130,7 +132,7 @@ private fun PlaylistInfo(playlistViewModel: PlaylistViewModel) {
     var showPlaylistDetailDialog by remember {
         mutableStateOf(false)
     }
-    if(showPlaylistDetailDialog) {
+    if (showPlaylistDetailDialog) {
         AlertDialog(
             onDismissRequest = {
                 showPlaylistDetailDialog = false
@@ -210,24 +212,20 @@ private fun PlaylistAction(
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Button(onClick = {
-            context.asyncGetSessionPlayer(MusicService::class.java){
+            context.asyncGetSessionPlayer(MusicService::class.java) {
                 it.apply {
                     stop()
                     clearMediaItems()
                     playlistDetail.readSafely()?.playlist?.tracks?.forEach { track ->
-                        println(track)
                         addMediaItem(
-                            MediaItem.Builder()
-                                .setMediaId(track.id.toString())
-                                .setMediaMetadata(
-                                    MediaMetadata.Builder()
-                                        .setTitle(track.name)
-                                        .setArtist(track.ar.joinToString(", ") { ar -> ar.name })
-                                        .setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${track.id}"))
-                                        .setArtworkUri(Uri.parse(track.al.picUrl))
-                                        .build()
-                                )
-                                .build()
+                            buildMediaItem(track.id.toString()){
+                                metadata {
+                                    setTitle(track.name)
+                                    setArtist(track.ar.joinToString(", ") { ar -> ar.name })
+                                    setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${track.id}"))
+                                    setArtworkUri(Uri.parse(track.al.picUrl))
+                                }
+                            }
                         )
                     }
                     prepare()
@@ -295,22 +293,19 @@ private fun PlaylistMusic(
             }
 
             IconButton(onClick = {
-                context.asyncGetSessionPlayer(MusicService::class.java){
+                context.asyncGetSessionPlayer(MusicService::class.java) {
                     it.apply {
                         stop()
                         clearMediaItems()
                         addMediaItem(
-                            MediaItem.Builder()
-                                .setMediaId(track.id.toString())
-                                .setMediaMetadata(
-                                    MediaMetadata.Builder()
-                                        .setTitle(track.name)
-                                        .setArtist(track.ar.joinToString(", ") { ar -> ar.name })
-                                        .setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${track.id}"))
-                                        .setArtworkUri(Uri.parse(track.al.picUrl))
-                                        .build()
-                                )
-                                .build()
+                            buildMediaItem(track.id.toString()) {
+                                metadata {
+                                    setTitle(track.name)
+                                    setArtist(track.ar.joinToString(", ") { ar -> ar.name })
+                                    setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${track.id}"))
+                                    setArtworkUri(Uri.parse(track.al.picUrl))
+                                }
+                            }
                         )
                         prepare()
                         play()

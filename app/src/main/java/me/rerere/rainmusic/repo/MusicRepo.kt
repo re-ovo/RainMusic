@@ -143,4 +143,15 @@ class MusicRepo @Inject constructor(
             emit(DataState.Error(e))
         }
     }
+
+    fun getDailyRecommendSongs() = flow {
+        emit(DataState.Loading)
+        try {
+            val result = api.getDailyRecommendSongList()
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
 }
