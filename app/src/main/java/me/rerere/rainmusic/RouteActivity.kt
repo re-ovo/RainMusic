@@ -1,6 +1,7 @@
 package me.rerere.rainmusic
 
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.*
@@ -12,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
@@ -179,6 +181,13 @@ class RouteActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+
+        // 禁止强制深色模式
+        (window.decorView
+            .findViewById<ViewGroup>(android.R.id.content)
+            .getChildAt(0) as? ComposeView).let {
+                it?.isForceDarkAllowed = false
         }
     }
 
