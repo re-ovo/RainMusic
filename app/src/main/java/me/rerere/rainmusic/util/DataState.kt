@@ -15,4 +15,7 @@ sealed class DataState<out T> {
     fun read(): T = (this as Success<T>).data
 
     fun readSafely(): T? = if (this is Success<T>) read() else null
+
+    val notLoaded: Boolean
+        get() = this is Empty || this is Error
 }

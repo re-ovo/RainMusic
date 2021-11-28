@@ -6,6 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import me.rerere.rainmusic.model.HotComment
+import me.rerere.rainmusic.repo.HotCommendRepo
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.repo.UserRepo
 import me.rerere.rainmusic.retrofit.api.model.Toplists
@@ -18,17 +20,21 @@ import javax.inject.Inject
 @HiltViewModel
 class IndexViewModel @Inject constructor(
     private val userRepo: UserRepo,
-    private val musicRepo: MusicRepo
+    private val musicRepo: MusicRepo,
+    private val hotCommendRepo: HotCommendRepo
 ): ViewModel() {
     // recommend page
     val personalizedPlaylist: MutableStateFlow<DataState<PersonalizedPlaylist>> = MutableStateFlow(DataState.Empty)
     val personalizedSongs: MutableStateFlow<DataState<NewSongs>> = MutableStateFlow(DataState.Empty)
     val toplist: MutableStateFlow<DataState<Toplists>> = MutableStateFlow(DataState.Empty)
+    val hotComment: MutableStateFlow<DataState<HotComment>> = MutableStateFlow(DataState.Empty)
 
     // library page
     val userPlaylist: MutableStateFlow<DataState<UserPlaylists>> = MutableStateFlow(DataState.Empty)
 
     fun refreshIndexPage(){
+        refreshHotComment()
+
         musicRepo.getPersonalizedPlaylist(10)
             .onEach {
                 personalizedPlaylist.value = it
@@ -42,6 +48,13 @@ class IndexViewModel @Inject constructor(
         musicRepo.getTopList()
             .onEach {
                 toplist.value = it
+            }.launchIn(viewModelScope)
+    }
+
+    fun refreshHotComment() {
+        hotCommendRepo.getHotCommend()
+            .onEach {
+                hotComment.value = it
             }.launchIn(viewModelScope)
     }
 

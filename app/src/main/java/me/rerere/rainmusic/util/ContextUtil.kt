@@ -3,7 +3,9 @@ package me.rerere.rainmusic.util
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ClipData
 import android.content.ClipDescription
+import android.content.ClipboardManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -78,4 +80,14 @@ fun Context.isFreeNetwork(): Boolean {
             else -> true
         }
     } ?: true
+}
+
+fun Context.setPaste(text: String) {
+    val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    clipboardManager.setPrimaryClip(
+        ClipData.newPlainText(
+            text,
+            text
+        )
+    )
 }

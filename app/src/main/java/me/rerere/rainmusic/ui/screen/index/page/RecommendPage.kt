@@ -1,5 +1,7 @@
 package me.rerere.rainmusic.ui.screen.index.page
 
+import android.net.Uri
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,18 +24,28 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import coil.compose.rememberImagePainter
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
+import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.Banner
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.local.LocalUserData
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexViewModel
+import me.rerere.rainmusic.ui.states.asyncGetSessionPlayer
 import me.rerere.rainmusic.util.DataState
+import me.rerere.rainmusic.util.RainMusicProtocol
 import me.rerere.rainmusic.util.okhttp.https
+import me.rerere.rainmusic.util.setPaste
+import me.rerere.rainmusic.util.toast
 
 @Composable
 fun IndexPage(
@@ -41,7 +53,7 @@ fun IndexPage(
 ) {
     val recommendStatus by indexViewModel.personalizedPlaylist.collectAsState()
     LaunchedEffect(LocalUserData.current) {
-        if(recommendStatus !is DataState.Success) {
+        if (recommendStatus.notLoaded) {
             indexViewModel.refreshIndexPage()
         }
     }
@@ -60,11 +72,125 @@ fun IndexPage(
         }
 
         item {
+            HotComment(indexViewModel)
+        }
+
+        item {
             NewSongs(indexViewModel)
         }
 
         item {
             Toplist(indexViewModel)
+        }
+    }
+}
+
+@Composable
+private fun HotComment(indexViewModel: IndexViewModel) {
+    val hotCommentState by indexViewModel.hotComment.collectAsState()
+    val context = LocalContext.current
+    Crossfade(targetState = hotCommentState) { hotComment ->
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(text = "热评", style = MaterialTheme.typography.headlineSmall)
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                tonalElevation = 8.dp,
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        top = 16.dp,
+                        end = 16.dp,
+                        bottom = 0.dp // 不需要给TextButton留Padding, 那样太丑
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    when(hotComment){
+                        is DataState.Success -> {
+                            Text(
+                                text = hotComment.readSafely()?.data?.content ?: "",
+                                maxLines = 7,
+                                modifier = Modifier.clickable {
+                                    context.asyncGetSessionPlayer(MusicService::class.java){
+                                        it.apply {
+                                            stop()
+                                            clearMediaItems()
+                                            addMediaItem(
+                                                MediaItem.Builder()
+                                                    .setMediaId(hotComment.data.data.id)
+                                                    .setMediaMetadata(
+                                                        MediaMetadata.Builder()
+                                                            .setTitle(hotComment.data.data.song)
+                                                            .setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${hotComment.data.data.id}"))
+                                                            .build()
+                                                    )
+                                                    .build()
+                                            )
+                                            prepare()
+                                            play()
+                                        }
+                                    }
+                                    context.toast("开始播放: ${hotComment.data.data.song}")
+                                }
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.End)
+                            ) {
+                                Text(
+                                    text = "@${hotComment.readSafely()?.data?.name ?: ""}",
+                                    fontSize = LocalTextStyle.current.fontSize * 0.75,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = "《${hotComment.readSafely()?.data?.song}》",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = LocalTextStyle.current.fontSize * 0.75
+                                )
+                            }
+                        }
+                        is DataState.Loading -> {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text(text = "加载中 ~")
+                            }
+                        }
+                        is DataState.Error -> {
+                            Text(text = "加载失败: ${hotComment.exception.javaClass.simpleName}")
+                        }
+                        else -> {}
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.End)
+                    ) {
+                        TextButton(onClick = {
+                            hotComment.readSafely()?.data?.content?.let {
+                                context.setPaste(it)
+                            }
+                        }) {
+                            Text(text = "复制")
+                        }
+
+                        TextButton(onClick = {
+                            indexViewModel.refreshHotComment()
+                        }) {
+                            Text(text = "下一个")
+                        }
+                    }
+                }
+
+            }
         }
     }
 }
@@ -307,7 +433,7 @@ private fun Toplist(indexViewModel: IndexViewModel) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier.clickable {
-                                    Screen.Playlist.navigate(navController){
+                                    Screen.Playlist.navigate(navController) {
                                         "$it/${item.id}"
                                     }
                                 }
@@ -338,7 +464,8 @@ private fun Toplist(indexViewModel: IndexViewModel) {
                             )
                         }
                     }
-                    else -> {}
+                    else -> {
+                    }
                 }
             }
         }
