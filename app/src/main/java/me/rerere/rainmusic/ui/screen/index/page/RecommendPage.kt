@@ -307,7 +307,10 @@ fun LargeButton() {
 
             Surface(
                 modifier = Modifier
-                    .weight(1f),
+                    .weight(1f)
+                    .clickable {
+                        Screen.DailySong.navigate(navController)
+                    },
                 tonalElevation = 12.dp,
                 shape = RoundedCornerShape(8.dp)
             ) {

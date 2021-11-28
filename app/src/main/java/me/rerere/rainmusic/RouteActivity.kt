@@ -36,6 +36,7 @@ import me.rerere.rainmusic.repo.UserRepo
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.local.LocalUserData
 import me.rerere.rainmusic.ui.screen.Screen
+import me.rerere.rainmusic.ui.screen.dailysong.DailySongScreen
 import me.rerere.rainmusic.ui.screen.index.IndexScreen
 import me.rerere.rainmusic.ui.screen.login.LoginScreen
 import me.rerere.rainmusic.ui.screen.player.PlayerScreen
@@ -168,6 +169,10 @@ class RouteActivity : ComponentActivity() {
                                 }
                             ) {
                                 PlayerScreen()
+                            }
+
+                            composable(Screen.DailySong.route){
+                                DailySongScreen()
                             }
 
                             // 测试各种API，Compose组件的Screen

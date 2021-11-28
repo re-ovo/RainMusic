@@ -107,7 +107,7 @@ private fun PlayListItem(playlist: UserPlaylists.Playlist) {
             .fillMaxWidth()
             .clickable {
                 Screen.Playlist.navigate(navController) {
-                    "$it/${playlist.id}"
+                    addPath(playlist.id.toString())
                 }
             },
         tonalElevation = 8.dp,
