@@ -197,6 +197,16 @@ class RouteActivity : ComponentActivity() {
     }
 
     private fun init() {
+        // 自动签到
+        userRepo.dailySign().onEach {
+            if(it is DataState.Success) {
+                it.readSafely()?.code?.takeIf { code -> code == 200 }?.let {
+                    toast("自动签到成功！")
+                }
+            }
+        }.launchIn(lifecycleScope)
+
+        // 检查身份信息
         combine(
             userRepo.refreshLogin(),
             userRepo.getAccountDetail()

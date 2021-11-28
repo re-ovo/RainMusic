@@ -1,10 +1,7 @@
 package me.rerere.rainmusic.retrofit.weapi
 
 import com.google.gson.JsonObject
-import me.rerere.rainmusic.retrofit.weapi.model.LikeList
-import me.rerere.rainmusic.retrofit.weapi.model.LoginResponse
-import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
-import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
+import me.rerere.rainmusic.retrofit.weapi.model.*
 import me.rerere.rainmusic.util.encrypt.encryptWeAPI
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
@@ -59,4 +56,10 @@ interface NeteaseMusicWeApi {
     suspend fun getLikeList(
         @FieldMap body: Map<String, String>
     ): LikeList
+
+    @POST("/weapi/point/dailyTask")
+    @FormUrlEncoded
+    suspend fun dailySign(
+        @FieldMap body: Map<String, String>
+    ): SignResult
 }

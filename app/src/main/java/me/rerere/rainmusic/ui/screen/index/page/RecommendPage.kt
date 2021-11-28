@@ -49,7 +49,8 @@ fun IndexPage(
     indexViewModel: IndexViewModel
 ) {
     val recommendStatus by indexViewModel.personalizedPlaylist.collectAsState()
-    LaunchedEffect(LocalUserData.current) {
+    val userData = LocalUserData.current
+    LaunchedEffect(userData) {
         if (recommendStatus.notLoaded) {
             indexViewModel.refreshIndexPage()
         }

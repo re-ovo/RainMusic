@@ -14,6 +14,7 @@ import me.rerere.rainmusic.retrofit.api.model.Toplists
 import me.rerere.rainmusic.retrofit.api.model.UserPlaylists
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
+import me.rerere.rainmusic.retrofit.weapi.model.SignResult
 import me.rerere.rainmusic.util.DataState
 import javax.inject.Inject
 

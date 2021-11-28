@@ -101,4 +101,21 @@ class UserRepo @Inject constructor(
             emit(DataState.Error(e))
         }
     }
+
+    fun dailySign() = flow {
+        emit(DataState.Loading)
+        try {
+            val result = weApi.dailySign(
+                encryptWeAPI(
+                    mapOf(
+                        "type" to "0" // Android 签到
+                    )
+                )
+            )
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
 }
