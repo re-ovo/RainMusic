@@ -23,6 +23,7 @@ class AppContext : Application() {
     }
 
     companion object {
+        @JvmStatic
         lateinit var instance: AppContext
     }
 }

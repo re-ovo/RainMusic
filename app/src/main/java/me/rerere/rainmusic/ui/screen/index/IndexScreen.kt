@@ -2,6 +2,8 @@ package me.rerere.rainmusic.ui.screen.index
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -26,6 +29,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
+import me.rerere.rainmusic.BuildConfig
 import me.rerere.rainmusic.R
 import me.rerere.rainmusic.RouteActivity
 import me.rerere.rainmusic.ui.component.*
@@ -38,6 +42,7 @@ import me.rerere.rainmusic.ui.screen.index.page.LibraryPage
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.okhttp.CookieHelper
 
+@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 @ExperimentalMaterial3Api
@@ -84,13 +89,15 @@ fun IndexScreen(
             ) { page ->
                 when (page) {
                     0 -> {
-                        IndexPage(indexViewModel = indexViewModel)
+                        IndexPage(indexViewModel)
                     }
                     1 -> {
                         DiscoverPage()
                     }
                     2 -> {
-                        LibraryPage()
+                        RequireLoginVisible {
+                            LibraryPage(indexViewModel)
+                        }
                     }
                 }
             }
@@ -156,15 +163,27 @@ private fun IndexTopBar(
             }
         },
         actions = {
-            TextButton(onClick = {
-                CookieHelper.logout()
-            }) {
-                Text(text = "注销登录 (测试)")
+            if(BuildConfig.DEBUG) {
+                TextButton(onClick = {
+                    CookieHelper.logout()
+                }) {
+                    Text(text = "注销登录")
+                }
             }
 
-            IconButton(onClick = {
-                navController.navigate(Screen.Search.route)
-            }) {
+            if(BuildConfig.DEBUG){
+                TextButton(onClick = {
+                    Screen.Test.navigate(navController)
+                }) {
+                    Text(text = "测试页面")
+                }
+            }
+
+            IconButton(
+                onClick = {
+                    navController.navigate(Screen.Search.route)
+                }
+            ) {
                 Icon(Icons.Rounded.Search, "Search")
             }
         },

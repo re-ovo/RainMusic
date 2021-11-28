@@ -39,6 +39,7 @@ import me.rerere.rainmusic.ui.screen.login.LoginScreen
 import me.rerere.rainmusic.ui.screen.player.PlayerScreen
 import me.rerere.rainmusic.ui.screen.playlist.PlaylistScreen
 import me.rerere.rainmusic.ui.screen.search.SearchScreen
+import me.rerere.rainmusic.ui.screen.test.TestScreen
 import me.rerere.rainmusic.ui.theme.RainMusicTheme
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.defaultEnterTransition
@@ -165,6 +166,14 @@ class RouteActivity : ComponentActivity() {
                                 }
                             ) {
                                 PlayerScreen()
+                            }
+
+                            // 测试各种API，Compose组件的Screen
+                            // 不在release版本中提供这个screen
+                            if(BuildConfig.DEBUG) {
+                                composable("test") {
+                                    TestScreen()
+                                }
                             }
                         }
                     }

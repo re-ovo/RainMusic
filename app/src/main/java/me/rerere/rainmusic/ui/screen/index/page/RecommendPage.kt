@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,6 +26,7 @@ import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
 import me.rerere.rainmusic.ui.component.Banner
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.local.LocalNavController
+import me.rerere.rainmusic.ui.local.LocalUserData
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexViewModel
 import me.rerere.rainmusic.util.DataState
@@ -34,6 +36,10 @@ import me.rerere.rainmusic.util.okhttp.https
 fun IndexPage(
     indexViewModel: IndexViewModel
 ) {
+    LaunchedEffect(LocalUserData.current){
+        indexViewModel.refreshIndexPage()
+    }
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),

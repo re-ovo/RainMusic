@@ -1,9 +1,6 @@
 package me.rerere.rainmusic.retrofit.api
 
-import me.rerere.rainmusic.retrofit.api.model.AccountDetail
-import me.rerere.rainmusic.retrofit.api.model.Lyric
-import me.rerere.rainmusic.retrofit.api.model.MusicDetails
-import me.rerere.rainmusic.retrofit.api.model.PlaylistDetail
+import me.rerere.rainmusic.retrofit.api.model.*
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -36,4 +33,10 @@ interface NeteaseMusicApi {
     suspend fun getLyric(
         @FieldMap body: Map<String, String>
     ): Lyric
+
+    @POST("/api/user/playlist")
+    @FormUrlEncoded
+    suspend fun getUserPlaylist(
+        @FieldMap body: Map<String, String>
+    ): UserPlaylists
 }

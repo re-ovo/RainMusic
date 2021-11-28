@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.repo.UserRepo
+import me.rerere.rainmusic.retrofit.api.model.UserPlaylists
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
 import me.rerere.rainmusic.util.DataState
@@ -18,9 +19,12 @@ class IndexViewModel @Inject constructor(
     private val userRepo: UserRepo,
     private val musicRepo: MusicRepo
 ): ViewModel() {
-    // index page
+    // recommend page
     val personalizedPlaylist: MutableStateFlow<DataState<PersonalizedPlaylist>> = MutableStateFlow(DataState.Empty)
     val personalizedSongs: MutableStateFlow<DataState<NewSongs>> = MutableStateFlow(DataState.Empty)
+
+    // library page
+    val userPlaylist: MutableStateFlow<DataState<UserPlaylists>> = MutableStateFlow(DataState.Empty)
 
     fun refreshIndexPage(){
         musicRepo.getPersonalizedPlaylist(10)
@@ -35,7 +39,12 @@ class IndexViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    init {
-        refreshIndexPage()
+    fun refreshLibraryPage(id: Long) {
+        userRepo.getUserPlaylists(
+            uid = id,
+            limit = 1000
+        ).onEach {
+            userPlaylist.value = it
+        }.launchIn(viewModelScope)
     }
 }

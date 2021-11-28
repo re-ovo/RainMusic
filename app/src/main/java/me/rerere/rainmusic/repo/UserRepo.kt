@@ -81,4 +81,24 @@ class UserRepo @Inject constructor(
             emit(DataState.Error(e))
         }
     }
+
+    fun getUserPlaylists(
+        uid: Long,
+        limit: Int = 10
+    ) = flow {
+        emit(DataState.Loading)
+        try {
+            val result = api.getUserPlaylist(
+                mapOf(
+                    "uid" to uid.toString(),
+                    "limit" to limit.toString(),
+                    "includeVideo" to "false"
+                )
+            )
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
 }

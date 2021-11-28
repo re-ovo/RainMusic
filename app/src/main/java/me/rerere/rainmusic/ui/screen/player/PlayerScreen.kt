@@ -134,7 +134,7 @@ private fun PlayerUI(
     Scaffold(
         topBar = {
             Row(
-                modifier = Modifier.statusBarsPadding(),
+                modifier = Modifier.statusBarsPadding().padding(vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {

@@ -1,6 +1,11 @@
 package me.rerere.rainmusic.ui.component
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import me.rerere.rainmusic.model.UserData
 import me.rerere.rainmusic.ui.local.LocalUserData
 
@@ -11,11 +16,18 @@ import me.rerere.rainmusic.ui.local.LocalUserData
  */
 @Composable
 fun RequireLoginVisible(
+    notLoginUI: @Composable () -> Unit = {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            Text(text = "此功能需要登录")
+        }
+    },
     content: @Composable () -> Unit
 ) {
     val userData = LocalUserData.current
     if(!userData.isVisitor){
         content()
+    } else {
+        notLoginUI()
     }
 }
 
