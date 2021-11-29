@@ -1,7 +1,5 @@
 package me.rerere.rainmusic.ui.screen.index.page
 
-import android.net.Uri
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,26 +21,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import coil.compose.rememberImagePainter
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
-import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.local.LocalUserData
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexViewModel
-import me.rerere.rainmusic.ui.states.asyncGetSessionPlayer
 import me.rerere.rainmusic.util.DataState
-import me.rerere.rainmusic.util.RainMusicProtocol
-import me.rerere.rainmusic.util.media.buildMediaItem
-import me.rerere.rainmusic.util.media.metadata
 import me.rerere.rainmusic.util.setPaste
-import me.rerere.rainmusic.util.toast
 
 @Composable
 fun IndexPage(
@@ -85,16 +74,15 @@ fun IndexPage(
 
 @Composable
 private fun HotComment(indexViewModel: IndexViewModel) {
-    val hotComment by indexViewModel.hotComment.collectAsState()
+    val yiYan by indexViewModel.yiyan.collectAsState()
     val context = LocalContext.current
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(text = "热评", style = MaterialTheme.typography.headlineSmall)
+        Text(text = "一言", style = MaterialTheme.typography.headlineSmall)
         Surface(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+                .fillMaxWidth(),
             tonalElevation = 8.dp,
             shape = RoundedCornerShape(8.dp)
         ) {
@@ -107,47 +95,12 @@ private fun HotComment(indexViewModel: IndexViewModel) {
                 ),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                when (hotComment) {
+                when (yiYan) {
                     is DataState.Success -> {
                         Text(
-                            text = hotComment.readSafely()?.data?.content ?: "",
-                            maxLines = 7,
-                            modifier = Modifier.clickable {
-                                context.asyncGetSessionPlayer(MusicService::class.java) {
-                                    it.apply {
-                                        stop()
-                                        clearMediaItems()
-                                        addMediaItem(
-                                            buildMediaItem(hotComment.read().data.id) {
-                                                metadata {
-                                                    setTitle(hotComment.read().data.song)
-                                                    setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${hotComment.read().data.id}"))
-                                                }
-                                            }
-                                        )
-                                        prepare()
-                                        play()
-                                    }
-                                }
-                                context.toast("开始播放: ${hotComment.read().data.song}")
-                            }
+                            text = yiYan.readSafely() ?: "",
+                            maxLines = 7
                         )
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.End)
-                        ) {
-                            Text(
-                                text = "@${hotComment.readSafely()?.data?.name ?: ""}",
-                                fontSize = LocalTextStyle.current.fontSize * 0.75,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "《${hotComment.readSafely()?.data?.song}》",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = LocalTextStyle.current.fontSize * 0.75
-                            )
-                        }
                     }
                     is DataState.Loading -> {
                         Row(
@@ -158,7 +111,7 @@ private fun HotComment(indexViewModel: IndexViewModel) {
                         }
                     }
                     is DataState.Error -> {
-                        Text(text = "加载失败: ${hotComment.javaClass.simpleName}")
+                        Text(text = "加载失败: ${yiYan.javaClass.simpleName}")
                     }
                     else -> {
                     }
@@ -170,7 +123,7 @@ private fun HotComment(indexViewModel: IndexViewModel) {
                     horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.End)
                 ) {
                     TextButton(onClick = {
-                        hotComment.readSafely()?.data?.content?.let {
+                        yiYan.readSafely()?.let {
                             context.setPaste(it)
                         }
                     }) {

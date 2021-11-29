@@ -6,15 +6,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import me.rerere.rainmusic.model.HotComment
-import me.rerere.rainmusic.repo.HotCommendRepo
+import me.rerere.rainmusic.repo.TenApiRepo
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.repo.UserRepo
 import me.rerere.rainmusic.retrofit.api.model.Toplists
 import me.rerere.rainmusic.retrofit.api.model.UserPlaylists
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
-import me.rerere.rainmusic.retrofit.weapi.model.SignResult
 import me.rerere.rainmusic.util.DataState
 import javax.inject.Inject
 
@@ -22,13 +20,13 @@ import javax.inject.Inject
 class IndexViewModel @Inject constructor(
     private val userRepo: UserRepo,
     private val musicRepo: MusicRepo,
-    private val hotCommendRepo: HotCommendRepo
+    private val tenApiRepo: TenApiRepo
 ): ViewModel() {
     // recommend page
     val personalizedPlaylist: MutableStateFlow<DataState<PersonalizedPlaylist>> = MutableStateFlow(DataState.Empty)
     val personalizedSongs: MutableStateFlow<DataState<NewSongs>> = MutableStateFlow(DataState.Empty)
     val toplist: MutableStateFlow<DataState<Toplists>> = MutableStateFlow(DataState.Empty)
-    val hotComment: MutableStateFlow<DataState<HotComment>> = MutableStateFlow(DataState.Empty)
+    val yiyan: MutableStateFlow<DataState<String>> = MutableStateFlow(DataState.Empty)
 
     // library page
     val userPlaylist: MutableStateFlow<DataState<UserPlaylists>> = MutableStateFlow(DataState.Empty)
@@ -53,9 +51,9 @@ class IndexViewModel @Inject constructor(
     }
 
     fun refreshHotComment() {
-        hotCommendRepo.getHotCommend()
+        tenApiRepo.loadYiYan()
             .onEach {
-                hotComment.value = it
+                yiyan.value = it
             }.launchIn(viewModelScope)
     }
 
