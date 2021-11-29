@@ -1,5 +1,7 @@
 package me.rerere.rainmusic.util
 
+import androidx.compose.runtime.Composable
+
 sealed class DataState<out T> {
     object Empty : DataState<Nothing>()
     object Loading : DataState<Nothing>()
@@ -18,4 +20,22 @@ sealed class DataState<out T> {
 
     val notLoaded: Boolean
         get() = this is Empty || this is Error
+
+    /**
+     * 可视化DataState
+     */
+    @Composable
+    inline fun Display(
+        empty: @Composable () -> Unit = {},
+        loading: @Composable () -> Unit = {},
+        error: @Composable (Exception) -> Unit = {},
+        success: @Composable (T) -> Unit
+    ) {
+        when(this){
+            is Success -> success(read())
+            is Error -> error(exception)
+            is Loading -> loading()
+            is Empty -> empty()
+        }
+    }
 }
