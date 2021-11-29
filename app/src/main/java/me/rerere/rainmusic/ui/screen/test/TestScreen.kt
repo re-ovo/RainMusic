@@ -47,6 +47,15 @@ fun TestScreen(testViewModel: TestViewModel = hiltViewModel()) {
             var content by remember {
                 mutableStateOf("")
             }
+
+            Button(onClick = {
+                testViewModel.test {
+                    content = it
+                }
+            }) {
+                Text(text = "Send")
+            }
+
             TextField(value = content, onValueChange = {content = it})
             Button(onClick = {
                 val decrypt = AES.decryptAesEcb(
@@ -68,17 +77,17 @@ class TestViewModel @Inject constructor(
     private val api: NeteaseMusicApi,
     private val eApi: NeteaseMusicEApi
 ) : ViewModel() {
-    fun test(id: Long){
+    fun test(callback: (String) -> Unit){
         viewModelScope.launch {
-            eApi.count(
-                encryptEApi(
-                    url = "/api/pl/count",
-                    data = mapOf(
+            weApi.getPlaylistCat(
+                encryptWeAPI(
+                    mapOf(
 
                     )
                 )
             ).let {
                 println(it)
+                callback(it.toString())
             }
         }
     }

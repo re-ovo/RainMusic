@@ -57,9 +57,18 @@ interface NeteaseMusicWeApi {
         @FieldMap body: Map<String, String>
     ): LikeList
 
+    /**
+     * 签到
+     */
     @POST("/weapi/point/dailyTask")
     @FormUrlEncoded
     suspend fun dailySign(
         @FieldMap body: Map<String, String>
     ): SignResult
+
+    @POST("/weapi/playlist/hottags")
+    @FormUrlEncoded
+    suspend fun getPlaylistCat(
+        @FieldMap body: Map<String, String>
+    ): JsonObject
 }

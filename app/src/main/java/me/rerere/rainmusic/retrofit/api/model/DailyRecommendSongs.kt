@@ -55,7 +55,7 @@ data class DailyRecommendSongs(
             @SerializedName("m")
             val m: M,
             @SerializedName("mark")
-            val mark: Int,
+            val mark: Long,
             @SerializedName("mst")
             val mst: Int,
             @SerializedName("mv")

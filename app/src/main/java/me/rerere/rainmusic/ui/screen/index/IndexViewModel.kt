@@ -28,6 +28,9 @@ class IndexViewModel @Inject constructor(
     val toplist: MutableStateFlow<DataState<Toplists>> = MutableStateFlow(DataState.Empty)
     val yiyan: MutableStateFlow<DataState<String>> = MutableStateFlow(DataState.Empty)
 
+    // playlist discover
+    // TODO:
+
     // library page
     val userPlaylist: MutableStateFlow<DataState<UserPlaylists>> = MutableStateFlow(DataState.Empty)
 

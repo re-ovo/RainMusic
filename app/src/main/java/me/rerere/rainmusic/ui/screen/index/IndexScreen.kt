@@ -92,7 +92,7 @@ fun IndexScreen(
                         IndexPage(indexViewModel)
                     }
                     1 -> {
-                        DiscoverPage()
+                        DiscoverPage(indexViewModel)
                     }
                     2 -> {
                         RequireLoginVisible {

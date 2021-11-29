@@ -1,5 +1,6 @@
 package me.rerere.rainmusic.ui.screen.index.page
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,12 +26,17 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
+import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.local.LocalUserData
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexViewModel
+import me.rerere.rainmusic.ui.states.asyncGetSessionPlayer
 import me.rerere.rainmusic.util.DataState
+import me.rerere.rainmusic.util.RainMusicProtocol
+import me.rerere.rainmusic.util.media.buildMediaItem
+import me.rerere.rainmusic.util.media.metadata
 import me.rerere.rainmusic.util.setPaste
 
 @Composable
@@ -318,6 +324,7 @@ fun NewSongs(indexViewModel: IndexViewModel) {
                             )
                         }
                     }
+                    else -> {}
                 }
             }
         }
@@ -328,10 +335,26 @@ fun NewSongs(indexViewModel: IndexViewModel) {
 private fun PsSongCard(
     song: NewSongs.Result
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .clickable {
-
+                context.asyncGetSessionPlayer(MusicService::class.java){
+                    it.apply {
+                        stop()
+                        clearMediaItems()
+                        addMediaItem(buildMediaItem(song.id.toString()){
+                            metadata {
+                                setTitle(song.name)
+                                setArtist(song.song.artists.joinToString(",") { ar -> ar.name })
+                                setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${song.id}"))
+                                setArtworkUri(Uri.parse(song.picUrl))
+                            }
+                        })
+                        prepare()
+                        play()
+                    }
+                }
             }
             .padding(8.dp)
             .width(IntrinsicSize.Min),

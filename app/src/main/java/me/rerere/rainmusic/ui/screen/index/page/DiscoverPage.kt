@@ -1,11 +1,27 @@
 package me.rerere.rainmusic.ui.screen.index.page
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import me.rerere.rainmusic.ui.screen.index.IndexViewModel
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun DiscoverPage(indexViewModel: IndexViewModel) {
+    val pagerState = rememberPagerState()
+    Column {
+        HorizontalPager(
+            count = 0,
+            state = pagerState
+        ) {
+            PlaylistCat(indexViewModel)
+        }
+    }
+}
 
 @Composable
-fun DiscoverPage() {
-    Box(modifier = Modifier.fillMaxSize())
+private fun PlaylistCat(indexViewModel: IndexViewModel) {
+
 }
