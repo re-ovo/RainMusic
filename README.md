@@ -11,19 +11,21 @@ RainMusic是一个使用 [Jetpack Compose](https://developer.android.com/jetpack
 * 开发中，暂时不提供下载，感兴趣的可以自行编译试用
 
 ## 👀 注意事项
-1. 本APP完全免费，请勿用于商业用途或非法用途，仅供个人学习使用
-2. 请勿提交任何"破解VIP", "破解灰色歌单" 之类的功能请求或者PR, 此类请求会被直接close
-3. 本APP不会实现`黑胶充值功能，注册功能，修改个人资料功能`，请自行使用官方APP完成这类操作
+1. 本APP完全免费，请勿用于商业用途或非法用途，仅供个人学习使用，任何修改版本导致的问题与本人无关
+2. 请勿提交任何"破解VIP", "破解灰色歌单" 之类的侵权功能请求或者PR, 此类请求会被直接close
+3. 本APP不会实现`黑胶充值功能，注册功能` 等类似敏感功能，请自行使用官方APP完成这类操作
+4. 请勿公开传播该APP，喜欢的个人使用就好!
 
 ## 🎯 特性
 * Material You 设计
 * 推荐
-* 搜索 (TODO)
+* 日推
+* 搜索 (WIP)
 * 歌单
 * 歌词
 * 自动签到
 * 热评
-* 私人FM (TODO)
+* 私人FM (WIP)
 
 ## 🖼️ 截图展示
 | 主页 | 播放器 | 歌词 |
@@ -50,9 +52,10 @@ RainMusic是一个使用 [Jetpack Compose](https://developer.android.com/jetpack
 
 ~~快毕业的无业游民, 有无大佬内推~~😅
 
-## 🤩 特别感谢
-* 特别感谢 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi) 项目，本APP的API调用部分大量参考了该项目的代码
-* 特别感谢 [music-java-api](https://github.com/jnwang95/music-java-api) 项目的加密Java实现
+## 🤩 感谢
+* 感谢 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi) 项目，本APP的API调用部分大量参考了该项目的代码
+* 感谢 [music-java-api](https://github.com/jnwang95/music-java-api) 项目的加密Java实现
+* 感谢 [tenapi.cn](https://docs.tenapi.cn/) 的热评API
 
 ## 🔭 参与到本项目
 如果你懂Jetpack Compose和Kotlin，欢迎提交PR!
