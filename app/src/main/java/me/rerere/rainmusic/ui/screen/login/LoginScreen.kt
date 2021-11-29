@@ -1,5 +1,6 @@
 package me.rerere.rainmusic.ui.screen.login
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,10 +22,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.navigationBarsWithImePadding
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.message
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import com.vanpra.composematerialdialogs.title
 import dev.burnoo.compose.rememberpreference.rememberStringPreference
 import me.rerere.rainmusic.R
 import me.rerere.rainmusic.RouteActivity
@@ -67,40 +64,48 @@ private fun Body(
     val context = LocalContext.current
     val navController = LocalNavController.current
     val loginState by loginViewModel.loginState.collectAsState()
-    val loginDialog = rememberMaterialDialogState()
-    MaterialDialog(
-        dialogState = loginDialog,
-        buttons = {
-            button("关闭") {
-                loginDialog.hide()
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
+
+    AnimatedVisibility(showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            confirmButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text(text = "关闭")
+                }
+            },
+            title = {
+                Text(text = "登录")
+            },
+            text = {
+                when (loginState) {
+                    1 -> {
+                        Text("登录中, 请稍等...")
+                    }
+                    -1 -> {
+                        Text("登录时发生错误，请检查你的网络连接")
+                    }
+                    2 -> {
+                        Text("密码错误!")
+                    }
+                    3 -> {
+                        Text("没有此账号!")
+                    }
+                    1000 -> {
+                        Text("登录成功")
+                    }
+                    else -> {
+                        Text("未知错误: $loginState")
+                    }
+                }
             }
-        }
-    ) {
-        title("登录")
-        when (loginState) {
-            1 -> {
-                message("登录中, 请稍等...")
-            }
-            -1 -> {
-                message("登录时发生错误，请检查你的网络连接")
-            }
-            2 -> {
-                message("密码错误!")
-            }
-            3 -> {
-                message("没有此账号!")
-            }
-            1000 -> {
-                message("登录成功")
-            }
-            else -> {
-                message("未知错误: $loginState")
-            }
-        }
+        )
     }
 
     LaunchedEffect(loginState) {
-        loginDialog.showing = loginState != 0
+        showDialog = loginState != 0
         if (loginState == 1000) {
             // 登录成功
             context.toast("登录成功")

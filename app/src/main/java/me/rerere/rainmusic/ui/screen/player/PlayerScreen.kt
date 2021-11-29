@@ -133,13 +133,15 @@ private fun PlayerUI(
                         modifier = Modifier.fillMaxWidth(),
                         text = currentMediaItem?.mediaMetadata?.title?.toString() ?: "暂未播放",
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
+                        maxLines = 1
                     )
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         text = currentMediaItem?.mediaMetadata?.artist?.toString() ?: "暂未播放",
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
+                        maxLines = 1
                     )
                 }
                 IconButton(onClick = {

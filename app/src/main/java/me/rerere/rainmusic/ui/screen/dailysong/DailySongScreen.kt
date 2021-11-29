@@ -1,6 +1,8 @@
 package me.rerere.rainmusic.ui.screen.dailysong
 
 import android.net.Uri
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -13,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,6 +23,7 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import me.rerere.rainmusic.retrofit.api.model.DailyRecommendSongs
 import me.rerere.rainmusic.service.MusicService
+import me.rerere.rainmusic.ui.component.AppBarStyle
 import me.rerere.rainmusic.ui.component.PopBackIcon
 import me.rerere.rainmusic.ui.component.RainTopBar
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
@@ -36,6 +40,7 @@ fun DailySongScreen(
 ) {
     val dailySongs by dailySongViewModel.dailySongs.collectAsState()
     val context = LocalContext.current
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         topBar = {
             RainTopBar(
@@ -70,12 +75,14 @@ fun DailySongScreen(
                     }) {
                         Icon(Icons.Rounded.PlayArrow, null)
                     }
-                }
+                },
+                scrollBehavior = scrollBehavior,
+                appBarStyle = AppBarStyle.Large
             )
         }
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = rememberInsetsPaddingValues(insets = LocalWindowInsets.current.navigationBars)
         ){
