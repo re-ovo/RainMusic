@@ -66,9 +66,30 @@ interface NeteaseMusicWeApi {
         @FieldMap body: Map<String, String>
     ): SignResult
 
-    @POST("/weapi/playlist/hottags")
+    /**
+     * 获取所有歌单种类
+     */
+    @POST("/weapi/playlist/catalogue")
     @FormUrlEncoded
     suspend fun getPlaylistCat(
         @FieldMap body: Map<String, String>
-    ): JsonObject
+    ): PlaylistCategory
+
+    /**
+     * 获取种类下的歌单列表
+     */
+    @POST("/weapi/playlist/list")
+    @FormUrlEncoded
+    suspend fun getTopPlaylist(
+        @FieldMap body: Map<String, String>
+    ): TopPlaylists
+
+    /**
+     * 获取热门歌单tag
+     */
+    @POST("/weapi/playlist/hottags")
+    @FormUrlEncoded
+    suspend fun getHotPlaylistTags(
+        @FieldMap body: Map<String, String>
+    ): HotPlaylistTag
 }

@@ -4,7 +4,6 @@ import androidx.compose.runtime.*
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import kotlinx.coroutines.isActive
-import me.rerere.rainmusic.model.MusicInfo
 
 @Composable
 fun rememberCurrentMediaItem(player: Player?): MediaItem? {

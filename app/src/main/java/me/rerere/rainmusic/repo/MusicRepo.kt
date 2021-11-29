@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.flow
 import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
 import me.rerere.rainmusic.retrofit.eapi.NeteaseMusicEApi
 import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
+import me.rerere.rainmusic.retrofit.weapi.model.HotPlaylistTag
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.encrypt.encryptEApi
 import me.rerere.rainmusic.util.encrypt.encryptWeAPI
@@ -152,6 +153,60 @@ class MusicRepo @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             emit(DataState.Error(e))
+        }
+    }
+
+    fun getPlaylistCategory() = flow {
+        emit(DataState.Loading)
+        try {
+            val result = weApi.getPlaylistCat(
+                encryptWeAPI(
+                    mapOf()
+                )
+            )
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
+
+    fun getTopPlaylist(
+        category: String,
+        order: String = "hot",
+        limit: Int = 50,
+        offset: Int = 0
+    ) = flow {
+        emit(DataState.Loading)
+        try {
+            val result = weApi.getTopPlaylist(
+                encryptWeAPI(
+                    mapOf(
+                        "cat" to category,
+                        "order" to order,
+                        "limit" to limit.toString(),
+                        "offset" to offset.toString(),
+                        "total" to "true"
+                    )
+                )
+            )
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
+
+    suspend fun getHotPlaylistTags(): HotPlaylistTag? {
+        return try {
+            weApi.getHotPlaylistTags(
+                encryptWeAPI(
+                    mapOf()
+                )
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 }

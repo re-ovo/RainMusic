@@ -2,15 +2,12 @@ package me.rerere.rainmusic.ui.screen.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.soywiz.krypto.md5
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import me.rerere.rainmusic.repo.UserRepo
-import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
 import me.rerere.rainmusic.util.DataState
-import me.rerere.rainmusic.util.encrypt.encryptWeAPI
 import javax.inject.Inject
 
 @HiltViewModel

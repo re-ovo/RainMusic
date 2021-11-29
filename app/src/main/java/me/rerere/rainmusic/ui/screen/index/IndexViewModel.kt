@@ -6,20 +6,23 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import me.rerere.rainmusic.repo.TenApiRepo
+import kotlinx.coroutines.launch
 import me.rerere.rainmusic.repo.MusicRepo
+import me.rerere.rainmusic.repo.TenApiRepo
 import me.rerere.rainmusic.repo.UserRepo
 import me.rerere.rainmusic.retrofit.api.model.Toplists
 import me.rerere.rainmusic.retrofit.api.model.UserPlaylists
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
+import me.rerere.rainmusic.retrofit.weapi.model.PlaylistCategory
+import me.rerere.rainmusic.sharedPreferencesOf
 import me.rerere.rainmusic.util.DataState
 import javax.inject.Inject
 
 @HiltViewModel
 class IndexViewModel @Inject constructor(
     private val userRepo: UserRepo,
-    private val musicRepo: MusicRepo,
+    val musicRepo: MusicRepo,
     private val tenApiRepo: TenApiRepo
 ): ViewModel() {
     // recommend page
@@ -29,7 +32,8 @@ class IndexViewModel @Inject constructor(
     val yiyan: MutableStateFlow<DataState<String>> = MutableStateFlow(DataState.Empty)
 
     // playlist discover
-    // TODO:
+    val categoryAll: MutableStateFlow<DataState<PlaylistCategory>> = MutableStateFlow(DataState.Empty)
+    val categorySelected: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
 
     // library page
     val userPlaylist: MutableStateFlow<DataState<UserPlaylists>> = MutableStateFlow(DataState.Empty)
@@ -51,6 +55,27 @@ class IndexViewModel @Inject constructor(
             .onEach {
                 toplist.value = it
             }.launchIn(viewModelScope)
+    }
+
+    fun refreshExplorePage() {
+        musicRepo.getPlaylistCategory().onEach {
+            categoryAll.value = it
+        }.launchIn(viewModelScope)
+
+        refreshSelectedCategory()
+    }
+
+    fun refreshSelectedCategory(){
+        viewModelScope.launch {
+            val sharedPreferences = sharedPreferencesOf("playlist_category")
+            categorySelected.value = if (sharedPreferences.contains("data")) {
+                // 载入用户自定义歌单category
+                (sharedPreferences.getString("data", "")?.split(",") ?: emptyList())
+            } else {
+                // 载入热门category
+                musicRepo.getHotPlaylistTags()?.tags?.map { it.name } ?: emptyList()
+            }
+        }
     }
 
     fun refreshHotComment() {

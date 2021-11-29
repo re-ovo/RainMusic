@@ -26,9 +26,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
-import androidx.media3.common.Player
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.launch
@@ -38,7 +35,6 @@ import me.rerere.rainmusic.ui.component.PopBackIcon
 import me.rerere.rainmusic.ui.component.RainTopBar
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.states.asyncGetSessionPlayer
-import me.rerere.rainmusic.ui.states.rememberMediaSessionPlayer
 import me.rerere.rainmusic.util.RainMusicProtocol
 import me.rerere.rainmusic.util.media.buildMediaItem
 import me.rerere.rainmusic.util.media.metadata

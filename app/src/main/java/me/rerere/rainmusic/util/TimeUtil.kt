@@ -2,8 +2,6 @@ package me.rerere.rainmusic.util
 
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.*
 
 fun now() = System.currentTimeMillis()

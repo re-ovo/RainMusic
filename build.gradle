@@ -7,6 +7,7 @@ buildscript {
         kotlin_version = '1.5.31'
         accompanist_version = '0.21.2-beta'
         media3_version = "1.0.0-alpha01"
+        paging_version = "3.1.0"
     }
 
     repositories {

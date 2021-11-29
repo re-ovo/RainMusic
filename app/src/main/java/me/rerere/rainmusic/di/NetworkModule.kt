@@ -9,11 +9,8 @@ import me.rerere.rainmusic.retrofit.eapi.NeteaseMusicEApi
 import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
 import me.rerere.rainmusic.util.okhttp.CookieHelper
 import me.rerere.rainmusic.util.okhttp.EnsureHttpsInterceptor
-import me.rerere.rainmusic.util.okhttp.RetryHelper
 import me.rerere.rainmusic.util.okhttp.UserAgentInterceptor
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit

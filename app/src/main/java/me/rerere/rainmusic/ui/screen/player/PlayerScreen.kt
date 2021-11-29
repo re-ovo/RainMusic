@@ -1,41 +1,29 @@
 package me.rerere.rainmusic.ui.screen.player
 
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Slider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
@@ -54,11 +42,9 @@ import me.rerere.rainmusic.ui.states.rememberCurrentMediaItem
 import me.rerere.rainmusic.ui.states.rememberMediaSessionPlayer
 import me.rerere.rainmusic.ui.states.rememberPlayProgress
 import me.rerere.rainmusic.ui.states.rememberPlayState
-import me.rerere.rainmusic.util.RainMusicProtocol
 import me.rerere.rainmusic.util.formatAsPlayerTime
 import me.rerere.rainmusic.util.toast
 import kotlin.math.roundToLong
-import kotlin.random.Random
 
 @ExperimentalMaterial3Api
 @Composable
