@@ -1,4 +1,6 @@
-# <img src="app/src/main/res/mipmap-xhdpi/ic_launcher.png"> RainMusic
+<img src="app/src/main/res/mipmap-xhdpi/ic_launcher.png"> 
+
+# RainMusic
 [![GitHub issues](https://img.shields.io/github/issues/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/issues)
 [![GitHub forks](https://img.shields.io/github/forks/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/network)
 [![GitHub stars](https://img.shields.io/github/stars/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/stargazers)
