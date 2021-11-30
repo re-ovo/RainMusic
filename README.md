@@ -1,4 +1,4 @@
-<img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
+<img src="app/src/main/res/mipmap-xhdpi/ic_launcher.png">
 
 # RainMusic
 [![GitHub issues](https://img.shields.io/github/issues/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/issues)
