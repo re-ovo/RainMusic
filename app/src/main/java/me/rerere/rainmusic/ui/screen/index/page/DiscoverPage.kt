@@ -36,14 +36,13 @@ import kotlinx.coroutines.launch
 import me.rerere.rainmusic.model.Playlists
 import me.rerere.rainmusic.paging.TopPlaylistPagingSource
 import me.rerere.rainmusic.retrofit.weapi.model.PlaylistCategory
-import me.rerere.rainmusic.retrofit.weapi.model.TopPlaylists
-import me.rerere.rainmusic.sharedPreferencesOf
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexViewModel
 import me.rerere.rainmusic.ui.states.items
 import me.rerere.rainmusic.util.DataState
+import me.rerere.rainmusic.util.sharedPreferencesOf
 import me.rerere.rainmusic.util.toast
 import soup.compose.material.motion.MaterialFadeThrough
 

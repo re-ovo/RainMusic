@@ -1,3 +1,5 @@
+<img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
+
 # RainMusic
 [![GitHub issues](https://img.shields.io/github/issues/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/issues)
 [![GitHub forks](https://img.shields.io/github/forks/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/network)
@@ -6,9 +8,6 @@
 
 RainMusic是一个使用 [Jetpack Compose](https://developer.android.com/jetpack/compose) 构建的网易云第三方app,
 采用 [Material You](https://m3.material.io/) 设计，专注听歌功能，没有社交功能，还你一个纯净的音乐APP。
-
-## 📦️ 下载安装包
-* 开发中，暂时不提供下载，感兴趣的可以自行编译试用
 
 ## 👀 注意事项
 1. 本APP完全免费，请勿用于商业用途或非法用途，仅供个人学习使用，任何修改版本导致的问题与本人无关
@@ -31,6 +30,9 @@ RainMusic是一个使用 [Jetpack Compose](https://developer.android.com/jetpack
 | 主页 | 播放器 | 歌词 |
 | ----- | ------| ------|
 | <img src="art/index.png" align="left" height="400">| <img src="art/player.png" align="left" height="400">| <img src="art/lyric.png" align="left" height="400"> |
+
+## 📦️ 下载安装包
+* 开发中，暂时不提供下载，感兴趣的可以自行编译试用
 
 ## 📭 常见问题
 1. **有没有iOS版?**   

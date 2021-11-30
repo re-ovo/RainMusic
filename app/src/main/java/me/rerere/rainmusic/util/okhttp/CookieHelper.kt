@@ -2,7 +2,7 @@ package me.rerere.rainmusic.util.okhttp
 
 import android.util.Log
 import androidx.core.content.edit
-import me.rerere.rainmusic.sharedPreferencesOf
+import me.rerere.rainmusic.util.sharedPreferencesOf
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl

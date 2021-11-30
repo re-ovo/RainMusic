@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import me.rerere.rainmusic.model.Playlists
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.repo.TenApiRepo
 import me.rerere.rainmusic.repo.UserRepo
@@ -17,8 +16,8 @@ import me.rerere.rainmusic.retrofit.api.model.UserPlaylists
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
 import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
 import me.rerere.rainmusic.retrofit.weapi.model.PlaylistCategory
-import me.rerere.rainmusic.sharedPreferencesOf
 import me.rerere.rainmusic.util.DataState
+import me.rerere.rainmusic.util.sharedPreferencesOf
 import javax.inject.Inject
 
 @HiltViewModel

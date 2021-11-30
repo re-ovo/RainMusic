@@ -18,6 +18,3 @@ class AppContext : Application() {
     }
 }
 
-fun sharedPreferencesOf(
-    name: String
-): SharedPreferences = AppContext.instance.getSharedPreferences(name, Context.MODE_PRIVATE)
