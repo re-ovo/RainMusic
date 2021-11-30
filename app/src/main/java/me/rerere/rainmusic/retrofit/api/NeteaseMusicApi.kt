@@ -60,4 +60,13 @@ interface NeteaseMusicApi {
      */
     @GET("/api/v3/discovery/recommend/songs")
     suspend fun getDailyRecommendSongList(): DailyRecommendSongs
+
+    /**
+     * 获取精品歌单
+     */
+    @POST("/api/playlist/highquality/list")
+    @FormUrlEncoded
+    suspend fun getHighQualityPlaylist(
+        @FieldMap body: Map<String, String>
+    ): HighQualityPlaylist
 }

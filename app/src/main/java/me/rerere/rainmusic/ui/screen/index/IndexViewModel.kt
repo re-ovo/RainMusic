@@ -7,9 +7,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import me.rerere.rainmusic.model.Playlists
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.repo.TenApiRepo
 import me.rerere.rainmusic.repo.UserRepo
+import me.rerere.rainmusic.retrofit.api.model.HighQualityPlaylist
 import me.rerere.rainmusic.retrofit.api.model.Toplists
 import me.rerere.rainmusic.retrofit.api.model.UserPlaylists
 import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
@@ -34,6 +36,7 @@ class IndexViewModel @Inject constructor(
     // playlist discover
     val categoryAll: MutableStateFlow<DataState<PlaylistCategory>> = MutableStateFlow(DataState.Empty)
     val categorySelected: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
+    val highQualityPlaylist: MutableStateFlow<DataState<HighQualityPlaylist>> = MutableStateFlow(DataState.Empty)
 
     // library page
     val userPlaylist: MutableStateFlow<DataState<UserPlaylists>> = MutableStateFlow(DataState.Empty)
@@ -60,6 +63,13 @@ class IndexViewModel @Inject constructor(
     fun refreshExplorePage() {
         musicRepo.getPlaylistCategory().onEach {
             categoryAll.value = it
+        }.launchIn(viewModelScope)
+
+        musicRepo.getHighQualityPlaylist(
+            cat = "全部",
+            limit = 50
+        ).onEach {
+            highQualityPlaylist.value = it
         }.launchIn(viewModelScope)
 
         refreshSelectedCategory()

@@ -209,4 +209,25 @@ class MusicRepo @Inject constructor(
             null
         }
     }
+
+    fun getHighQualityPlaylist(
+        cat: String,
+        limit: Int = 20
+    ) = flow {
+        emit(DataState.Loading)
+        try {
+            val result = api.getHighQualityPlaylist(
+                mapOf(
+                    "cat" to cat,
+                    "limit" to limit.toString(),
+                    "lasttime" to "0",
+                    "total" to "true"
+                )
+            )
+            emit(DataState.Success(result))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(DataState.Error(e))
+        }
+    }
 }

@@ -3,6 +3,7 @@ package me.rerere.rainmusic.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import kotlinx.coroutines.flow.collect
+import me.rerere.rainmusic.model.Playlists
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.retrofit.weapi.model.TopPlaylists
 import me.rerere.rainmusic.util.DataState
@@ -10,12 +11,12 @@ import me.rerere.rainmusic.util.DataState
 class TopPlaylistPagingSource(
     private val category: String,
     private val musicRepo: MusicRepo
-) : PagingSource<Int, TopPlaylists.Playlists>() {
-    override fun getRefreshKey(state: PagingState<Int, TopPlaylists.Playlists>): Int {
+) : PagingSource<Int, Playlists>() {
+    override fun getRefreshKey(state: PagingState<Int, Playlists>): Int {
         return 0
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TopPlaylists.Playlists> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Playlists> {
         val page = params.key ?: 0
         var state: DataState<TopPlaylists> = DataState.Loading
 

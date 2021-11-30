@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
@@ -32,6 +33,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
+import me.rerere.rainmusic.model.Playlists
 import me.rerere.rainmusic.paging.TopPlaylistPagingSource
 import me.rerere.rainmusic.retrofit.weapi.model.PlaylistCategory
 import me.rerere.rainmusic.retrofit.weapi.model.TopPlaylists
@@ -199,9 +201,20 @@ private fun TopPlaylist(
     category: String
 ) {
     if(category == "精品"){
-        Text(text = "还没写")
+        val highQualityPlaylist by indexViewModel.highQualityPlaylist.collectAsState()
+        LazyVerticalGrid(
+            cells = GridCells.Adaptive(110.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            if(highQualityPlaylist is DataState.Success) {
+                items(highQualityPlaylist.read().playlists) { playlist ->
+                    PlaylistItem(playlist)
+                }
+            }
+        }
         return
     }
+
     val items = remember(category) {
         Pager(
             config = PagingConfig(
@@ -228,7 +241,7 @@ private fun TopPlaylist(
 }
 
 @Composable
-private fun PlaylistItem(playlist: TopPlaylists.Playlists) {
+private fun PlaylistItem(playlist: Playlists) {
     val navController = LocalNavController.current
     Column(
         modifier = Modifier
