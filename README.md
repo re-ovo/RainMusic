@@ -1,6 +1,4 @@
-<img src="app/src/main/res/mipmap-xhdpi/ic_launcher.png">
-
-# RainMusic
+# <img src="app/src/main/res/mipmap-xhdpi/ic_launcher.png"> RainMusic
 [![GitHub issues](https://img.shields.io/github/issues/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/issues)
 [![GitHub forks](https://img.shields.io/github/forks/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/network)
 [![GitHub stars](https://img.shields.io/github/stars/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/stargazers)
@@ -17,14 +15,14 @@ RainMusic是一个使用 [Jetpack Compose](https://developer.android.com/jetpack
 
 ## 🎯 特性
 * Material You 设计
-* 推荐
+* 推荐页面
 * 日推
-* 搜索 (WIP)
 * 歌单
 * 歌词
 * 自动签到
 * 一言
 * 私人FM (WIP)
+* 搜索 (WIP)
 
 ## 🖼️ 截图展示
 | 主页 | 播放器 | 歌词 |
