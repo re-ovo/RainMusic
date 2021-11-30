@@ -68,15 +68,17 @@ class RouteActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Edge to Edge
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // 启动闪屏
         installSplashScreen().apply {
             // 准备完数据才结束splash screen
             setKeepVisibleCondition { preparingData }
         }
 
+        // splash screen时加载用户数据
         init()
-
-        // Edge to Edge
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             RainMusicTheme {
