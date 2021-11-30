@@ -8,8 +8,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.rerere.rainmusic.repo.MusicRepo
-import me.rerere.rainmusic.repo.TenApiRepo
+import me.rerere.rainmusic.repo.YiYanRepo
 import me.rerere.rainmusic.repo.UserRepo
+import me.rerere.rainmusic.repo.YiYan
 import me.rerere.rainmusic.retrofit.api.model.HighQualityPlaylist
 import me.rerere.rainmusic.retrofit.api.model.Toplists
 import me.rerere.rainmusic.retrofit.api.model.UserPlaylists
@@ -24,13 +25,13 @@ import javax.inject.Inject
 class IndexViewModel @Inject constructor(
     private val userRepo: UserRepo,
     val musicRepo: MusicRepo,
-    private val tenApiRepo: TenApiRepo
+    private val yiYanRepo: YiYanRepo
 ): ViewModel() {
     // recommend page
     val personalizedPlaylist: MutableStateFlow<DataState<PersonalizedPlaylist>> = MutableStateFlow(DataState.Empty)
     val personalizedSongs: MutableStateFlow<DataState<NewSongs>> = MutableStateFlow(DataState.Empty)
     val toplist: MutableStateFlow<DataState<Toplists>> = MutableStateFlow(DataState.Empty)
-    val yiyan: MutableStateFlow<DataState<String>> = MutableStateFlow(DataState.Empty)
+    val yiyan: MutableStateFlow<DataState<YiYan>> = MutableStateFlow(DataState.Empty)
 
     // playlist discover
     val categoryAll: MutableStateFlow<DataState<PlaylistCategory>> = MutableStateFlow(DataState.Empty)
@@ -88,7 +89,7 @@ class IndexViewModel @Inject constructor(
     }
 
     fun refreshHotComment() {
-        tenApiRepo.loadYiYan()
+        yiYanRepo.loadYiYan()
             .onEach {
                 yiyan.value = it
             }.launchIn(viewModelScope)

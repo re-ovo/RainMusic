@@ -104,9 +104,10 @@ private fun HotComment(indexViewModel: IndexViewModel) {
                 when (yiYan) {
                     is DataState.Success -> {
                         Text(
-                            text = yiYan.readSafely() ?: "",
+                            text = yiYan.readSafely()?.hitokoto ?: "",
                             maxLines = 7
                         )
+                        Text(text = "《${yiYan.readSafely()?.from}》", modifier = Modifier.align(Alignment.End))
                     }
                     is DataState.Loading -> {
                         Row(
@@ -130,7 +131,7 @@ private fun HotComment(indexViewModel: IndexViewModel) {
                 ) {
                     TextButton(onClick = {
                         yiYan.readSafely()?.let {
-                            context.setPaste(it)
+                            context.setPaste(it.hitokoto)
                         }
                     }) {
                         Text(text = "复制")
@@ -339,11 +340,11 @@ private fun PsSongCard(
     Column(
         modifier = Modifier
             .clickable {
-                context.asyncGetSessionPlayer(MusicService::class.java){
+                context.asyncGetSessionPlayer(MusicService::class.java) {
                     it.apply {
                         stop()
                         clearMediaItems()
-                        addMediaItem(buildMediaItem(song.id.toString()){
+                        addMediaItem(buildMediaItem(song.id.toString()) {
                             metadata {
                                 setTitle(song.name)
                                 setArtist(song.song.artists.joinToString(",") { ar -> ar.name })

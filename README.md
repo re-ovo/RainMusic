@@ -57,7 +57,7 @@ RainMusic是一个使用 [Jetpack Compose](https://developer.android.com/jetpack
 ## 🤩 感谢
 * 感谢 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi) 项目，本APP的API调用部分大量参考了该项目的代码
 * 感谢 [music-java-api](https://github.com/jnwang95/music-java-api) 项目的加密Java实现
-* 感谢 [tenapi.cn](https://docs.tenapi.cn/) 的一言API
+* 感谢 [hitokoto.cn](https://hitokoto.cn) 的一言API
 
 ## 🔭 参与到本项目
 如果你懂Jetpack Compose和Kotlin，欢迎提交PR!
