@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.repo.UserRepo
 import me.rerere.rainmusic.retrofit.api.model.Lyric
@@ -23,8 +24,25 @@ class PlayerScreenViewModel @Inject constructor(
     val musicDetail: MutableStateFlow<DataState<MusicDetails>> = MutableStateFlow(DataState.Empty)
     val lyric: MutableStateFlow<DataState<Lyric>> = MutableStateFlow(DataState.Empty)
 
-    fun loadLikeList(uid: Long){
-        if(uid <= 0){
+    fun like(uid: Long) {
+        viewModelScope.launch {
+            if (musicDetail.value is DataState.Success && likeList.value is DataState.Success) {
+                val id = musicDetail.value.read().songs[0].id
+                val like = likeList.value.read().ids.contains(id)
+                musicRepo.likeMusic(
+                    musicId = id,
+                    like = !like
+                )?.let {
+                    if(it.code == 200) {
+                        loadLikeList(uid)
+                    }
+                }
+            }
+        }
+    }
+
+    fun loadLikeList(uid: Long) {
+        if (uid <= 0) {
             return
         }
         userRepo.getLikeList(uid).onEach {
@@ -33,7 +51,7 @@ class PlayerScreenViewModel @Inject constructor(
     }
 
     fun loadMusicDetail(id: Long) {
-        if(id == 0L){
+        if (id == 0L) {
             musicDetail.value = DataState.Empty
             lyric.value = DataState.Empty
             return

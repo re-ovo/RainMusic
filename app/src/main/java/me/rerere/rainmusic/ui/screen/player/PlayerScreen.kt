@@ -248,7 +248,7 @@ private fun PlayerUI(
 
                     val likeList by playerScreenViewModel.likeList.collectAsState()
                     IconButton(onClick = {
-                        context.toast("还没写")
+                        playerScreenViewModel.like(userData.id)
                     }) {
                         Icon(
                             imageVector = if(likeList.readSafely()?.ids?.contains(currentMediaItem?.mediaId?.toLong() ?: 0) == true) {

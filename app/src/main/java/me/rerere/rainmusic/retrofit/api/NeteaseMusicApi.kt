@@ -1,10 +1,8 @@
 package me.rerere.rainmusic.retrofit.api
 
+import com.google.gson.JsonObject
 import me.rerere.rainmusic.retrofit.api.model.*
-import retrofit2.http.FieldMap
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface NeteaseMusicApi {
     /**
@@ -69,4 +67,11 @@ interface NeteaseMusicApi {
     suspend fun getHighQualityPlaylist(
         @FieldMap body: Map<String, String>
     ): HighQualityPlaylist
+
+    @POST("/api/radio/like")
+    @FormUrlEncoded
+    suspend fun like(
+        @Header("like") like: Boolean,
+        @FieldMap body: Map<String, String>
+    ): LikeResult
 }

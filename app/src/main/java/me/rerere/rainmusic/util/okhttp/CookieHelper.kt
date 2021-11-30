@@ -33,6 +33,15 @@ object CookieHelper : CookieJar {
                 .value("pc")
                 .build()
         }
+        if (!cookies.any {
+                it.name == "appver"
+            }) {
+            cookies += Cookie.Builder()
+                .domain("music.163.com")
+                .name("appver")
+                .value("2.7.1.198277")
+                .build()
+        }
         return cookies.also {
             Log.d(TAG, "loadForRequest: ${cookies.joinToString(separator = ","){it.name}}")
         }

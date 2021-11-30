@@ -3,6 +3,7 @@ package me.rerere.rainmusic.repo
 import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.flow
 import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
+import me.rerere.rainmusic.retrofit.api.model.LikeResult
 import me.rerere.rainmusic.retrofit.eapi.NeteaseMusicEApi
 import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
 import me.rerere.rainmusic.retrofit.weapi.model.HotPlaylistTag
@@ -118,7 +119,7 @@ class MusicRepo @Inject constructor(
         }
     }
 
-    fun getLyric(id: Long)= flow {
+    fun getLyric(id: Long) = flow {
         emit(DataState.Loading)
         try {
             val result = api.getLyric(
@@ -239,16 +240,35 @@ class MusicRepo @Inject constructor(
     suspend fun subPlaylist(
         playlistId: Long,
         sub: Boolean
-    ) : SubPlaylistResult? = try {
+    ): SubPlaylistResult? = try {
         weApi.subPlaylist(
-            action = if(sub) "subscribe" else "unsubscribe",
+            action = if (sub) "subscribe" else "unsubscribe",
             body = encryptWeAPI(
                 mapOf(
                     "id" to playlistId.toString()
                 )
             )
         )
-    }catch (e: Exception){
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+
+    suspend fun likeMusic(
+        musicId: Long,
+        like: Boolean
+    ): LikeResult? = try {
+        api.like(
+            like = like,
+            body = mapOf(
+                "alg" to "itembased",
+                "trackId" to musicId.toString(),
+                "like" to like.toString(),
+                "time" to "3"
+            )
+        )
+
+    } catch (e: Exception) {
         e.printStackTrace()
         null
     }
