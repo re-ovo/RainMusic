@@ -200,6 +200,7 @@ private fun PlaylistAction(
 ) {
     val playlistDetail by playlistViewModel.playlistDetail.collectAsState()
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -234,7 +235,7 @@ private fun PlaylistAction(
         }
 
         IconButton(onClick = {
-
+            playlistViewModel.subscribe(scope)
         }) {
             val imageVector = if (playlistDetail.readSafely()?.playlist?.subscribed == true) {
                 Icons.Rounded.Favorite

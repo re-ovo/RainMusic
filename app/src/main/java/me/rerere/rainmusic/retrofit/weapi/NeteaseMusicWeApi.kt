@@ -6,6 +6,7 @@ import me.rerere.rainmusic.util.encrypt.encryptWeAPI
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 /**
  * 网易云weapi接口
@@ -92,4 +93,14 @@ interface NeteaseMusicWeApi {
     suspend fun getHotPlaylistTags(
         @FieldMap body: Map<String, String>
     ): HotPlaylistTag
+
+    /**
+     * 收藏与取消收藏歌单
+     */
+    @POST("/weapi/playlist/{action}")
+    @FormUrlEncoded
+    suspend fun subPlaylist(
+        @Path("action") action: String,
+        @FieldMap body: Map<String, String>
+    ): SubPlaylistResult
 }

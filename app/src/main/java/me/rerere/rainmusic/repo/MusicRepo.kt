@@ -1,10 +1,12 @@
 package me.rerere.rainmusic.repo
 
+import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.flow
 import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
 import me.rerere.rainmusic.retrofit.eapi.NeteaseMusicEApi
 import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
 import me.rerere.rainmusic.retrofit.weapi.model.HotPlaylistTag
+import me.rerere.rainmusic.retrofit.weapi.model.SubPlaylistResult
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.encrypt.encryptEApi
 import me.rerere.rainmusic.util.encrypt.encryptWeAPI
@@ -229,5 +231,25 @@ class MusicRepo @Inject constructor(
             e.printStackTrace()
             emit(DataState.Error(e))
         }
+    }
+
+    /**
+     * 订阅歌单
+     */
+    suspend fun subPlaylist(
+        playlistId: Long,
+        sub: Boolean
+    ) : SubPlaylistResult? = try {
+        weApi.subPlaylist(
+            action = if(sub) "subscribe" else "unsubscribe",
+            body = encryptWeAPI(
+                mapOf(
+                    "id" to playlistId.toString()
+                )
+            )
+        )
+    }catch (e: Exception){
+        e.printStackTrace()
+        null
     }
 }
