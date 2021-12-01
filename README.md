@@ -28,7 +28,7 @@ RainMusic是一个使用 [Jetpack Compose](https://developer.android.com/jetpack
 
 ## 🖼️ 截图展示
 | 推荐 | 发现 | 播放器 | 歌词 |
-| ----- | ------| ------|
+| ----- | ------| ------ | ------ | 
 | <img src="art/index.png" align="left" height="400">| <img src="art/discover.png" align="left" height="400"> | <img src="art/player.png" align="left" height="400">| <img src="art/lyric.png" align="left" height="400"> |
 
 ## 📦️ 下载安装包
