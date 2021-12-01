@@ -9,5 +9,6 @@
 
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rounded</item>
         <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
     </style>
 </resources>

@@ -312,11 +312,13 @@ private fun PlayerUI(
                         LaunchedEffect(progress) {
                             lyricLines?.let { lines ->
                                 val currentLyric = (progress?.first?.div(1000) ?: 0).toInt()
-                                val index = lines.indexOfFirst { lyric ->
-                                    lyric.time == currentLyric
+                                val index = lines.indexOfLast { lyric ->
+                                    lyric.time <= currentLyric
                                 }
-                                index.takeIf { i -> i >= 0 }?.let { i ->
-                                    listState.animateScrollToItem(i)
+                                index.takeIf { i -> i >= 0}?.let { i ->
+                                    if(listState.firstVisibleItemIndex < i) {
+                                        listState.animateScrollToItem(i)
+                                    }
                                     currentLyricIndex = i
                                 }
                             }
