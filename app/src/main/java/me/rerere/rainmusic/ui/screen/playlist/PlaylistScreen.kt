@@ -28,7 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.rerere.rainmusic.retrofit.api.model.PlaylistDetail
 import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.PopBackIcon
@@ -211,23 +213,26 @@ private fun PlaylistAction(
         Button(onClick = {
             context.asyncGetSessionPlayer(MusicService::class.java) {
                 it.apply {
-                    stop()
-                    clearMediaItems()
-                    playlistDetail.readSafely()?.playlist?.tracks?.forEach { track ->
-                        addMediaItem(
-                            buildMediaItem(track.id.toString()){
-                                metadata {
-                                    setTitle(track.name)
-                                    setArtist(track.ar.joinToString(", ") { ar -> ar.name })
-                                    setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${track.id}"))
-                                    setArtworkUri(Uri.parse(track.al.picUrl))
+                    scope.launch {
+                        stop()
+                        clearMediaItems()
+                        val mediaList = withContext(Dispatchers.Default){
+                            playlistDetail.readSafely()?.playlist?.tracks?.map { track ->
+                                buildMediaItem(track.id.toString()) {
+                                    metadata {
+                                        setTitle(track.name)
+                                        setArtist(track.ar.joinToString(", ") { ar -> ar.name })
+                                        setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${track.id}"))
+                                        setArtworkUri(Uri.parse(track.al.picUrl))
+                                    }
                                 }
-                            }
-                        )
+                            } ?: emptyList()
+                        }
+                        addMediaItems(mediaList)
+                        prepare()
+                        play()
+                        context.toast("开始播放该歌单")
                     }
-                    prepare()
-                    play()
-                    context.toast("开始播放该歌单")
                 }
             }
         }) {
