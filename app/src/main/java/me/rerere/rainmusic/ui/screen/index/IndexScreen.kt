@@ -3,6 +3,7 @@ package me.rerere.rainmusic.ui.screen.index
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,15 +11,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
@@ -119,6 +118,7 @@ private fun NetworkBanner(
     }
 }
 
+@ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @Composable
@@ -161,15 +161,15 @@ private fun IndexTopBar(
             }
         },
         actions = {
-            if(BuildConfig.DEBUG) {
+            var showDebugButtons by remember {
+                mutableStateOf(false)
+            }
+            if (BuildConfig.DEBUG && showDebugButtons) {
                 TextButton(onClick = {
                     CookieHelper.logout()
                 }) {
                     Text(text = "注销登录")
                 }
-            }
-
-            if(BuildConfig.DEBUG){
                 TextButton(onClick = {
                     Screen.Test.navigate(navController)
                 }) {
@@ -177,13 +177,18 @@ private fun IndexTopBar(
                 }
             }
 
-            IconButton(
-                onClick = {
-                    navController.navigate(Screen.Search.route)
-                }
-            ) {
-                Icon(Icons.Rounded.Search, "Search")
-            }
+            Icon(
+                modifier = Modifier.combinedClickable(
+                    onClick = {
+                        navController.navigate(Screen.Search.route)
+                    },
+                    onLongClick = {
+                        showDebugButtons = !showDebugButtons
+                    }
+                ).padding(8.dp),
+                imageVector = Icons.Rounded.Search,
+                contentDescription = "Search"
+            )
         },
         appBarStyle = AppBarStyle.Small,
         scrollBehavior = scrollBehavior
