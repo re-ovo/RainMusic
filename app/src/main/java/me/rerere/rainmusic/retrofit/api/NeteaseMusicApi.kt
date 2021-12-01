@@ -1,6 +1,5 @@
 package me.rerere.rainmusic.retrofit.api
 
-import com.google.gson.JsonObject
 import me.rerere.rainmusic.retrofit.api.model.*
 import retrofit2.http.*
 

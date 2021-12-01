@@ -69,7 +69,7 @@ class MusicRepo @Inject constructor(
             val result = api.getPlaylistDetail(
                 mapOf(
                     "id" to id.toString(),
-                    "n" to "100000",
+                    "n" to "5000", // 歌单返回的最多歌曲数量?
                     "s" to "8"
                 )
             )
