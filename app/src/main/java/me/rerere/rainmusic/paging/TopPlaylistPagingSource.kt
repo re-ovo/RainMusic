@@ -1,5 +1,6 @@
 package me.rerere.rainmusic.paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import kotlinx.coroutines.flow.collect
@@ -7,6 +8,8 @@ import me.rerere.rainmusic.model.Playlists
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.retrofit.weapi.model.TopPlaylists
 import me.rerere.rainmusic.util.DataState
+
+private const val TAG = "TopPlaylistPagingSource"
 
 class TopPlaylistPagingSource(
     private val category: String,
@@ -20,6 +23,8 @@ class TopPlaylistPagingSource(
         val page = params.key ?: 0
         var state: DataState<TopPlaylists> = DataState.Loading
 
+        Log.i(TAG, "load: loading playlist[$page] of $category")
+        
         musicRepo.getTopPlaylist(
             category = category,
             offset = page * params.loadSize,

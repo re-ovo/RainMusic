@@ -19,7 +19,7 @@ data class NewSongs(
         @SerializedName("copywriter")
         val copywriter: Any,
         @SerializedName("id")
-        val id: Int,
+        val id: Long,
         @SerializedName("name")
         val name: String,
         @SerializedName("picUrl")

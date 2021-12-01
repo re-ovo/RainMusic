@@ -106,7 +106,7 @@ data class AccountDetail(
         @SerializedName("signature")
         val signature: String,
         @SerializedName("userId")
-        val userId: Int,
+        val userId: Long,
         @SerializedName("userName")
         val userName: String,
         @SerializedName("userType")

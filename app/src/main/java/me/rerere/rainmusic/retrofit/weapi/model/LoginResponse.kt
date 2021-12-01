@@ -26,7 +26,7 @@ data class LoginResponse(
         @SerializedName("donateVersion")
         val donateVersion: Int,
         @SerializedName("id")
-        val id: Int,
+        val id: Long,
         @SerializedName("salt")
         val salt: String,
         @SerializedName("status")

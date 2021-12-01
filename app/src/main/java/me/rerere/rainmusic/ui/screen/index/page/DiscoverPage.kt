@@ -41,7 +41,6 @@ import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.screen.Screen
 import me.rerere.rainmusic.ui.screen.index.IndexViewModel
 import me.rerere.rainmusic.ui.states.items
-import me.rerere.rainmusic.ui.states.rememberPagingState
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.sharedPreferencesOf
 import me.rerere.rainmusic.util.toast
@@ -215,15 +214,23 @@ private fun TopPlaylist(
         return
     }
 
-    val items = rememberPagingState(
-        pageSize = 20,
-        cacheScope = indexViewModel.viewModelScope
-    ) {
-        TopPlaylistPagingSource(
-            musicRepo = indexViewModel.musicRepo,
-            category = category
-        )
-    }
+    val items = (indexViewModel.playlistCatPager[category] ?: run {
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                initialLoadSize = 20,
+                prefetchDistance = 3
+            ),
+            pagingSourceFactory = {
+                TopPlaylistPagingSource(
+                    category = category,
+                    musicRepo = indexViewModel.musicRepo
+                )
+            }
+        ).flow.cachedIn(indexViewModel.viewModelScope).also {
+            indexViewModel.playlistCatPager[category] = it
+        }
+    }).collectAsLazyPagingItems()
 
     LazyVerticalGrid(
         cells = GridCells.Adaptive(110.dp),

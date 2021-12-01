@@ -41,7 +41,7 @@ data class Lyric(
         @SerializedName("demand")
         val demand: Int,
         @SerializedName("id")
-        val id: Int,
+        val id: Long,
         @SerializedName("nickname")
         val nickname: String,
         @SerializedName("status")
@@ -49,7 +49,7 @@ data class Lyric(
         @SerializedName("uptime")
         val uptime: Long,
         @SerializedName("userid")
-        val userid: Int
+        val userid: Long
     )
 
     data class Tlyric(
@@ -71,7 +71,7 @@ data class Lyric(
         @SerializedName("uptime")
         val uptime: Long,
         @SerializedName("userid")
-        val userid: Int
+        val userid: Long
     )
 }
 

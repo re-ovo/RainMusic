@@ -103,7 +103,7 @@ data class PlaylistDetail(
         @SerializedName("updateTime")
         val updateTime: Long,
         @SerializedName("userId")
-        val userId: Int,
+        val userId: Long,
         @SerializedName("videoIds")
         val videoIds: Any,
         @SerializedName("videos")
@@ -165,7 +165,7 @@ data class PlaylistDetail(
             @SerializedName("signature")
             val signature: String,
             @SerializedName("userId")
-            val userId: Int,
+            val userId: Long,
             @SerializedName("userType")
             val userType: Int,
             @SerializedName("vipType")
@@ -193,7 +193,7 @@ data class PlaylistDetail(
             @SerializedName("t")
             val t: Int,
             @SerializedName("uid")
-            val uid: Int,
+            val uid: Long,
             @SerializedName("v")
             val v: Int
         )

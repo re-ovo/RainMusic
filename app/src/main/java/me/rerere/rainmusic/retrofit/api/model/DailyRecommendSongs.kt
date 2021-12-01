@@ -39,7 +39,7 @@ data class DailyRecommendSongs(
             @SerializedName("crbt")
             val crbt: Any,
             @SerializedName("djId")
-            val djId: Int,
+            val djId: Long,
             @SerializedName("dt")
             val dt: Int,
             @SerializedName("fee")
@@ -49,7 +49,7 @@ data class DailyRecommendSongs(
             @SerializedName("h")
             val h: H,
             @SerializedName("id")
-            val id: Int,
+            val id: Long,
             @SerializedName("l")
             val l: L,
             @SerializedName("m")

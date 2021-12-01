@@ -2,11 +2,15 @@ package me.rerere.rainmusic.ui.screen.index
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import me.rerere.rainmusic.model.Playlists
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.repo.YiYanRepo
 import me.rerere.rainmusic.repo.UserRepo
@@ -37,6 +41,7 @@ class IndexViewModel @Inject constructor(
     val categoryAll: MutableStateFlow<DataState<PlaylistCategory>> = MutableStateFlow(DataState.Empty)
     val categorySelected: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
     val highQualityPlaylist: MutableStateFlow<DataState<HighQualityPlaylist>> = MutableStateFlow(DataState.Empty)
+    val playlistCatPager: MutableMap<String, Flow<PagingData<Playlists>>> = mutableMapOf()
 
     // library page
     val userPlaylist: MutableStateFlow<DataState<UserPlaylists>> = MutableStateFlow(DataState.Empty)

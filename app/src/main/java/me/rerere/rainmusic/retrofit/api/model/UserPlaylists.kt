@@ -95,7 +95,7 @@ data class UserPlaylists(
         @SerializedName("updateTime")
         val updateTime: Long,
         @SerializedName("userId")
-        val userId: Int
+        val userId: Long
     ) {
         data class Creator(
             @SerializedName("accountStatus")
