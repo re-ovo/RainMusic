@@ -62,9 +62,10 @@ class RouteActivity : ComponentActivity() {
     var preparingData = true
     var userData by mutableStateOf(UserData.VISITOR)
 
-    @ExperimentalPagerApi
-    @ExperimentalMaterial3Api
-    @ExperimentalAnimationApi
+    @OptIn(ExperimentalAnimationApi::class,
+        androidx.compose.material3.ExperimentalMaterial3Api::class,
+        com.google.accompanist.pager.ExperimentalPagerApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

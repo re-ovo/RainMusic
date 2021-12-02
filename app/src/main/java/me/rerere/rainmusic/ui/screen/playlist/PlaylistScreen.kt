@@ -40,6 +40,7 @@ import me.rerere.rainmusic.ui.states.asyncGetSessionPlayer
 import me.rerere.rainmusic.util.RainMusicProtocol
 import me.rerere.rainmusic.util.media.buildMediaItem
 import me.rerere.rainmusic.util.media.metadata
+import me.rerere.rainmusic.util.okhttp.https
 import me.rerere.rainmusic.util.toast
 
 @ExperimentalMaterial3Api
@@ -223,7 +224,7 @@ private fun PlaylistAction(
                                         setTitle(track.name)
                                         setArtist(track.ar.joinToString(", ") { ar -> ar.name })
                                         setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${track.id}"))
-                                        setArtworkUri(Uri.parse(track.al.picUrl))
+                                        setArtworkUri(Uri.parse(track.al.picUrl.https))
                                     }
                                 }
                             } ?: emptyList()
