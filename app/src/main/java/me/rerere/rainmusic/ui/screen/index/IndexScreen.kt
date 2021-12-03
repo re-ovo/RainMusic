@@ -50,14 +50,11 @@ fun IndexScreen(
     val navController = LocalNavController.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val pagerState = rememberPagerState()
-    val scaffoldState = rememberScaffoldState()
     Scaffold(
         // modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        scaffoldState = scaffoldState,
         topBar = {
             IndexTopBar(
                 indexViewModel = indexViewModel,
-                scaffoldState = scaffoldState,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -124,7 +121,6 @@ private fun NetworkBanner(
 @Composable
 private fun IndexTopBar(
     indexViewModel: IndexViewModel,
-    scaffoldState: ScaffoldState,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
     val navController = LocalNavController.current
