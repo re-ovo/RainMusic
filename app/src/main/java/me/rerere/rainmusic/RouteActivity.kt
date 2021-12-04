@@ -1,5 +1,6 @@
 package me.rerere.rainmusic
 
+import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
@@ -62,7 +63,8 @@ class RouteActivity : ComponentActivity() {
     var preparingData = true
     var userData by mutableStateOf(UserData.VISITOR)
 
-    @OptIn(ExperimentalAnimationApi::class,
+    @OptIn(
+        ExperimentalAnimationApi::class,
         androidx.compose.material3.ExperimentalMaterial3Api::class,
         com.google.accompanist.pager.ExperimentalPagerApi::class
     )
@@ -174,13 +176,13 @@ class RouteActivity : ComponentActivity() {
                                 PlayerScreen()
                             }
 
-                            composable(Screen.DailySong.route){
+                            composable(Screen.DailySong.route) {
                                 DailySongScreen()
                             }
 
                             // 测试各种API，Compose组件的Screen
                             // 不在release版本中提供这个screen
-                            if(BuildConfig.DEBUG) {
+                            if (BuildConfig.DEBUG) {
                                 composable("test") {
                                     TestScreen()
                                 }
@@ -192,17 +194,18 @@ class RouteActivity : ComponentActivity() {
         }
 
         // 禁止强制深色模式
-        (window.decorView
-            .findViewById<ViewGroup>(android.R.id.content)
-            .getChildAt(0) as? ComposeView).let {
-                it?.isForceDarkAllowed = false
+        (window.decorView.findViewById<ViewGroup>(android.R.id.content)
+            .getChildAt(0) as? ComposeView)?.let {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                it.isForceDarkAllowed = false
+            }
         }
     }
 
     private fun init() {
         // 自动签到
         userRepo.dailySign().onEach {
-            if(it is DataState.Success) {
+            if (it is DataState.Success) {
                 it.readSafely()?.code?.takeIf { code -> code == 200 }?.let {
                     toast("自动签到成功！")
                 }

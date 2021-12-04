@@ -7,7 +7,7 @@
     <style name="Theme.RainMusic.Splash" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/Theme.RainMusic</item>
 
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rounded</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
         <item name="windowSplashScreenBackground">@color/white</item>
         <item name="windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
     </style>

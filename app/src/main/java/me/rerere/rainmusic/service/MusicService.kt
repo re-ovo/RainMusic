@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.datasource.DataSpec
@@ -50,6 +51,7 @@ class MusicService : MediaLibraryService() {
                     DefaultExtractorsFactory()
                 ),
             )
+            .setWakeMode(C.WAKE_MODE_LOCAL)
             .build()
 
         player.repeatMode = Player.REPEAT_MODE_ALL
