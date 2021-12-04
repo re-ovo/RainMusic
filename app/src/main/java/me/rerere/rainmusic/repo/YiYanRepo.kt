@@ -17,7 +17,7 @@ class YiYanRepo @Inject constructor(
         emit(DataState.Loading)
         try {
             val request = Request.Builder()
-                .url("https://v1.hitokoto.cn/?c=a&c=d&c=h&c=i&c=k")
+                .url("https://v1.hitokoto.cn")
                 .get()
                 .build()
             val result = withContext(Dispatchers.IO) {

@@ -116,7 +116,6 @@ private fun PlayerUI(
     LaunchedEffect(currentMediaItem) {
         playerScreenViewModel.loadMusicDetail(currentMediaItem?.mediaId?.toLong() ?: 0L)
     }
-
     Scaffold(
         topBar = {
             Row(
