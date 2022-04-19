@@ -11,6 +11,7 @@ import me.rerere.rainmusic.retrofit.weapi.model.SubPlaylistResult
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.encrypt.encryptEApi
 import me.rerere.rainmusic.util.encrypt.encryptWeAPI
+import me.rerere.rainmusic.util.requireOneOf
 import javax.inject.Inject
 
 class MusicRepo @Inject constructor(
@@ -268,6 +269,30 @@ class MusicRepo @Inject constructor(
             )
         )
 
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+
+    suspend fun manipulatePlaylist(
+        playlistId: Long,
+        op: String,
+        trackIds: Set<Long>
+    ): JsonObject? = try {
+        op.requireOneOf("add", "del")
+
+        api.manipulatePlaylist(
+            mapOf(
+                "op" to op,
+                "pid" to playlistId.toString(),
+                "trackIds" to trackIds.joinToString(
+                    separator = ",",
+                    prefix = "[",
+                    postfix = "]"
+                ) { it.toString() },
+                "imme" to "true"
+            )
+        )
     } catch (e: Exception) {
         e.printStackTrace()
         null

@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.navigationBarsPadding
@@ -43,7 +44,6 @@ import me.rerere.rainmusic.ui.states.rememberMediaSessionPlayer
 import me.rerere.rainmusic.ui.states.rememberPlayProgress
 import me.rerere.rainmusic.ui.states.rememberPlayState
 import me.rerere.rainmusic.util.formatAsPlayerTime
-import me.rerere.rainmusic.util.toast
 import kotlin.math.roundToLong
 
 @ExperimentalMaterial3Api
@@ -51,13 +51,11 @@ import kotlin.math.roundToLong
 fun PlayerScreen(
     playerScreenViewModel: PlayerScreenViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
     val player by rememberMediaSessionPlayer(MusicService::class.java)
     val userData = LocalUserData.current
-    LaunchedEffect(userData){
+    LaunchedEffect(userData) {
         playerScreenViewModel.loadLikeList(userData.id)
     }
-
     when (player) {
         null -> {
             NotConnectScreen()
@@ -113,13 +111,17 @@ private fun PlayerUI(
     val musicDetail by playerScreenViewModel.musicDetail.collectAsState()
     val userData = LocalUserData.current
 
+    // 加载音乐信息
     LaunchedEffect(currentMediaItem) {
         playerScreenViewModel.loadMusicDetail(currentMediaItem?.mediaId?.toLong() ?: 0L)
     }
+
     Scaffold(
         topBar = {
             Row(
-                modifier = Modifier.statusBarsPadding().padding(vertical = 16.dp),
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -151,115 +153,7 @@ private fun PlayerUI(
             }
         },
         bottomBar = {
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .navigationBarsPadding()
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    val percent: Float = progress?.let { (it.first * 100f / it.second) / 100f } ?: 0f
-
-                    Text(text = progress?.first?.formatAsPlayerTime() ?: "00:00")
-                    var valueChanger by remember(percent) {
-                        mutableStateOf(percent)
-                    }
-                    Slider(
-                        modifier = Modifier.weight(1f),
-                        value = valueChanger,
-                        onValueChange = {
-                            valueChanger = it
-                        },
-                        onValueChangeFinished = {
-                            player.seekTo(
-                                (valueChanger * (progress?.second ?: 0L))
-                                    .roundToLong()
-                                    .coerceAtLeast(0L)
-                            )
-                        }
-                    )
-                    Text(text = progress?.second?.formatAsPlayerTime() ?: "00:00")
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(
-                        16.dp,
-                        Alignment.CenterHorizontally
-                    )
-                ) {
-                    var show by remember {
-                        mutableStateOf(false)
-                    }
-                    DropdownMenu(
-                        expanded = show,
-                        onDismissRequest = { show = false }
-                    ) {
-                        DropdownMenuItem(onClick = {
-                            show = false
-                            player.repeatMode = Player.REPEAT_MODE_ONE
-                        }) {
-                            Text(text = "单曲循环")
-                        }
-                        DropdownMenuItem(onClick = {
-                            show = false
-                            player.repeatMode = Player.REPEAT_MODE_ALL
-                        }) {
-                            Text(text = "列表循环")
-                        }
-                    }
-                    IconButton(onClick = {
-                       show = true
-                    }) {
-                        Icon(Icons.Rounded.Repeat, null)
-                    }
-
-                    IconButton(onClick = {
-                        player.seekToPreviousMediaItem()
-                    }) {
-                        Icon(Icons.Rounded.SkipPrevious, null)
-                    }
-
-                    IconButton(
-                        onClick = {
-                            if (player.isPlaying) {
-                                player.pause()
-                            } else {
-                                player.play()
-                            }
-                        }
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(60.dp),
-                            imageVector = if (isPlaying == true) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
-                            contentDescription = null
-                        )
-                    }
-
-                    IconButton(onClick = {
-                        player.seekToNextMediaItem()
-                    }) {
-                        Icon(Icons.Rounded.SkipNext, null)
-                    }
-
-                    val likeList by playerScreenViewModel.likeList.collectAsState()
-                    IconButton(onClick = {
-                        playerScreenViewModel.like(userData.id)
-                    }) {
-                        Icon(
-                            imageVector = if(likeList.readSafely()?.ids?.contains(currentMediaItem?.mediaId?.toLong() ?: 0) == true) {
-                                Icons.Rounded.Favorite
-                            } else {
-                                Icons.Rounded.FavoriteBorder
-                            },
-                            contentDescription = null
-                        )
-                    }
-                }
-            }
+            BottomBar(playerScreenViewModel, progress, player, isPlaying, currentMediaItem)
         },
         containerColor = MaterialTheme.colorScheme.primaryContainer
     ) {
@@ -314,8 +208,8 @@ private fun PlayerUI(
                                 val index = lines.indexOfLast { lyric ->
                                     lyric.time <= currentLyric
                                 }
-                                index.takeIf { i -> i >= 0}?.let { i ->
-                                    if(listState.firstVisibleItemIndex < i) {
+                                index.takeIf { i -> i >= 0 }?.let { i ->
+                                    if (listState.firstVisibleItemIndex < i) {
                                         listState.animateScrollToItem(i)
                                     }
                                     currentLyricIndex = i
@@ -344,6 +238,188 @@ private fun PlayerUI(
                 }
             }
         }
+    }
+}
+
+
+@Composable
+private fun BottomBar(
+    playerScreenViewModel: PlayerScreenViewModel,
+    progress: Pair<Long, Long>?,
+    player: Player,
+    isPlaying: Boolean?,
+    currentMediaItem: MediaItem?
+) {
+    val userData = LocalUserData.current
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .navigationBarsPadding()
+    ) {
+        // 歌曲操作栏
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                16.dp,
+                Alignment.CenterHorizontally
+            )
+        ) {
+            var showDialog by remember {
+                mutableStateOf(false)
+            }
+            ManipulatePlaylistDialog(
+                show = showDialog,
+                musicId = currentMediaItem?.mediaId?.toLong() ?: 0L
+            )
+            // 将歌曲添加到歌单
+            IconButton(onClick = {
+                showDialog = true
+            }) {
+                Icon(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = null
+                )
+            }
+            // 红心
+            val likeList by playerScreenViewModel.likeList.collectAsState()
+            IconButton(onClick = {
+                playerScreenViewModel.like(userData.id)
+            }) {
+                Icon(
+                    imageVector = if (likeList.readSafely()?.ids?.contains(
+                            currentMediaItem?.mediaId?.toLong() ?: 0
+                        ) == true
+                    ) {
+                        Icons.Rounded.Favorite
+                    } else {
+                        Icons.Rounded.FavoriteBorder
+                    },
+                    contentDescription = null
+                )
+            }
+            // 循环控制
+            var show by remember {
+                mutableStateOf(false)
+            }
+            IconButton(onClick = {
+                show = true
+            }) {
+                Icon(Icons.Rounded.Repeat, null)
+                DropdownMenu(
+                    expanded = show,
+                    onDismissRequest = { show = false }
+                ) {
+                    DropdownMenuItem(onClick = {
+                        show = false
+                        player.repeatMode = Player.REPEAT_MODE_ONE
+                    }) {
+                        Text(text = "单曲循环")
+                    }
+                    DropdownMenuItem(onClick = {
+                        show = false
+                        player.repeatMode = Player.REPEAT_MODE_ALL
+                    }) {
+                        Text(text = "列表循环")
+                    }
+                }
+            }
+        }
+        // 进度条
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            val percent: Float = progress?.let { (it.first * 100f / it.second) / 100f } ?: 0f
+
+            Text(text = progress?.first?.formatAsPlayerTime() ?: "00:00")
+            var valueChanger by remember(percent) {
+                mutableStateOf(percent)
+            }
+            Slider(
+                modifier = Modifier.weight(1f),
+                value = valueChanger,
+                onValueChange = {
+                    valueChanger = it
+                },
+                onValueChangeFinished = {
+                    player.seekTo(
+                        (valueChanger * (progress?.second ?: 0L))
+                            .roundToLong()
+                            .coerceAtLeast(0L)
+                    )
+                }
+            )
+            Text(text = progress?.second?.formatAsPlayerTime() ?: "00:00")
+        }
+        // 播放控制栏
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                16.dp,
+                Alignment.CenterHorizontally
+            )
+        ) {
+            IconButton(onClick = {
+                player.seekToPreviousMediaItem()
+            }) {
+                Icon(
+                    modifier = Modifier.size(50.dp),
+                    imageVector = Icons.Rounded.SkipPrevious,
+                    contentDescription = null
+                )
+            }
+
+            IconButton(
+                onClick = {
+                    if (player.isPlaying) {
+                        player.pause()
+                    } else {
+                        player.play()
+                    }
+                }
+            ) {
+                Icon(
+                    modifier = Modifier.size(70.dp),
+                    imageVector = if (isPlaying == true) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
+                    contentDescription = null
+                )
+            }
+
+            IconButton(onClick = {
+                player.seekToNextMediaItem()
+            }) {
+                Icon(
+                    modifier = Modifier.size(50.dp),
+                    imageVector = Icons.Rounded.SkipNext,
+                    contentDescription = null
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ManipulatePlaylistDialog(show: Boolean, musicId: Long) {
+    if (show) {
+        AlertDialog(
+            onDismissRequest = {},
+            title = {
+                Text(text = "添加到歌单")
+            },
+            text = {
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    // TODO: 加载歌单列表
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(text = "完成")
+                }
+            }
+        )
     }
 }
 

@@ -18,7 +18,6 @@ import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import me.rerere.rainmusic.RouteActivity
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.util.DataState
@@ -35,8 +34,8 @@ class MusicService : MediaLibraryService() {
     lateinit var musicRepo: MusicRepo
     private val lifecycleScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-    lateinit var player: Player
-    lateinit var mediaSession: MediaLibrarySession
+    private lateinit var player: Player
+    private lateinit var mediaSession: MediaLibrarySession
 
     override fun onCreate() {
         super.onCreate()

@@ -17,7 +17,6 @@ import com.soywiz.krypto.AES
 import com.soywiz.krypto.Padding
 import com.soywiz.krypto.encoding.unhex
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
@@ -26,7 +25,6 @@ import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
 import me.rerere.rainmusic.ui.component.PopBackIcon
 import me.rerere.rainmusic.ui.component.RainTopBar
 import me.rerere.rainmusic.ui.local.LocalUserData
-import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.setPaste
 import javax.inject.Inject
 
@@ -91,14 +89,7 @@ class TestViewModel @Inject constructor(
 ) : ViewModel() {
     fun test(callback: (String) -> Unit){
         viewModelScope.launch {
-            musicRepo.getTopPlaylist(
-                category = "电子",
-                limit = 5
-            ).collect {
-                if(it is DataState.Success){
-                    callback(it.read().toString())
-                }
-            }
+
         }
     }
 }
