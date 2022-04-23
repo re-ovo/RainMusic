@@ -6,7 +6,7 @@ import androidx.paging.compose.LazyPagingItems
 
 fun <T : Any> LazyGridScope.items(
     items: LazyPagingItems<T>,
-    itemContent: @Composable LazyGridScope.(value: T?) -> Unit
+    itemContent: @Composable (value: T?) -> Unit
 ) {
     items(
         count = items.itemCount

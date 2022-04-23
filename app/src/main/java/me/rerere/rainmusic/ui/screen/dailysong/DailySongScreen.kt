@@ -1,8 +1,6 @@
 package me.rerere.rainmusic.ui.screen.dailysong
 
 import android.net.Uri
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -19,8 +17,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 import me.rerere.rainmusic.retrofit.api.model.DailyRecommendSongs
 import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.AppBarStyle
@@ -82,9 +78,11 @@ fun DailySongScreen(
         }
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = rememberInsetsPaddingValues(insets = LocalWindowInsets.current.navigationBars)
+            contentPadding = WindowInsets.navigationBars.asPaddingValues()
         ){
             when(dailySongs){
                 is DataState.Success -> {

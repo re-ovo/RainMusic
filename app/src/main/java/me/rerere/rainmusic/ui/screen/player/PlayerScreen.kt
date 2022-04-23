@@ -27,8 +27,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import coil.compose.rememberImagePainter
-import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
