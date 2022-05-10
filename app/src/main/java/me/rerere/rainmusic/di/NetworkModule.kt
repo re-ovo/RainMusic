@@ -4,9 +4,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
-import me.rerere.rainmusic.retrofit.eapi.NeteaseMusicEApi
-import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
+import me.rerere.rainmusic.data.retrofit.api.NeteaseMusicApi
+import me.rerere.rainmusic.data.retrofit.eapi.NeteaseMusicEApi
+import me.rerere.rainmusic.data.retrofit.weapi.NeteaseMusicWeApi
 import me.rerere.rainmusic.util.okhttp.CookieHelper
 import me.rerere.rainmusic.util.okhttp.EnsureHttpsInterceptor
 import me.rerere.rainmusic.util.okhttp.UserAgentInterceptor

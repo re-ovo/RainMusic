@@ -33,9 +33,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
-import me.rerere.rainmusic.model.Playlists
-import me.rerere.rainmusic.paging.TopPlaylistPagingSource
-import me.rerere.rainmusic.retrofit.weapi.model.PlaylistCategory
+import me.rerere.rainmusic.data.model.Playlists
+import me.rerere.rainmusic.data.paging.TopPlaylistPagingSource
+import me.rerere.rainmusic.data.retrofit.weapi.model.PlaylistCategory
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.screen.Screen
@@ -44,10 +44,8 @@ import me.rerere.rainmusic.ui.states.items
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.sharedPreferencesOf
 import me.rerere.rainmusic.util.toast
-import soup.compose.material.motion.MaterialFadeThrough
 
-@ExperimentalFoundationApi
-@OptIn(ExperimentalPagerApi::class, androidx.compose.animation.ExperimentalAnimationApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun DiscoverPage(indexViewModel: IndexViewModel) {
     val context = LocalContext.current
@@ -65,55 +63,53 @@ fun DiscoverPage(indexViewModel: IndexViewModel) {
 
     val category = listOf("全部", "官方", "精品") + categorySelect
 
-    MaterialFadeThrough(targetState = editing) { edit ->
-        if (edit) {
-            CategoryEditor(categoryAll, categorySelect) {
-                scope.launch {
-                    pagerState.scrollToPage(0)
-                }
-                sharedPreferencesOf("playlist_category").edit {
-                    putString("data", it.distinct().joinToString(","))
-                }
-                indexViewModel.refreshSelectedCategory()
-                context.toast("保存成功")
-                editing = false
+    if (editing) {
+        CategoryEditor(categoryAll, categorySelect) {
+            scope.launch {
+                pagerState.scrollToPage(0)
             }
-        } else {
-            Column {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
+            sharedPreferencesOf("playlist_category").edit {
+                putString("data", it.distinct().joinToString(","))
+            }
+            indexViewModel.refreshSelectedCategory()
+            context.toast("保存成功")
+            editing = false
+        }
+    } else {
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ScrollableTabRow(
+                    modifier = Modifier.weight(1f),
+                    selectedTabIndex = pagerState.currentPage,
+                    backgroundColor = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    edgePadding = 0.dp
                 ) {
-                    ScrollableTabRow(
-                        modifier = Modifier.weight(1f),
-                        selectedTabIndex = pagerState.currentPage,
-                        backgroundColor = MaterialTheme.colorScheme.background,
-                        contentColor = MaterialTheme.colorScheme.primary,
-                        edgePadding = 0.dp
-                    ) {
-                        category.forEachIndexed { index, sub ->
-                            Tab(
-                                selected = pagerState.currentPage == index,
-                                onClick = {
-                                    scope.launch {
-                                        pagerState.animateScrollToPage(index)
-                                    }
+                    category.forEachIndexed { index, sub ->
+                        Tab(
+                            selected = pagerState.currentPage == index,
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(index)
                                 }
-                            ) {
-                                Text(text = sub, modifier = Modifier.padding(4.dp))
                             }
+                        ) {
+                            Text(text = sub, modifier = Modifier.padding(4.dp))
                         }
                     }
+                }
 
-                    IconButton(onClick = { editing = true }) {
-                        Icon(Icons.Rounded.DashboardCustomize, null)
-                    }
+                IconButton(onClick = { editing = true }) {
+                    Icon(Icons.Rounded.DashboardCustomize, null)
                 }
-                HorizontalPager(
-                    count = category.size,
-                    state = pagerState
-                ) {
-                    TopPlaylist(indexViewModel, category[it])
-                }
+            }
+            HorizontalPager(
+                count = category.size,
+                state = pagerState
+            ) {
+                TopPlaylist(indexViewModel, category[it])
             }
         }
     }
@@ -199,13 +195,13 @@ private fun TopPlaylist(
     indexViewModel: IndexViewModel,
     category: String
 ) {
-    if(category == "精品"){
+    if (category == "精品") {
         val highQualityPlaylist by indexViewModel.highQualityPlaylist.collectAsState()
         LazyVerticalGrid(
             columns = GridCells.Adaptive(110.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            if(highQualityPlaylist is DataState.Success) {
+            if (highQualityPlaylist is DataState.Success) {
                 items(highQualityPlaylist.read().playlists) { playlist ->
                     PlaylistItem(playlist)
                 }

@@ -2,12 +2,12 @@ package me.rerere.rainmusic.repo
 
 import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.flow
-import me.rerere.rainmusic.retrofit.api.NeteaseMusicApi
-import me.rerere.rainmusic.retrofit.api.model.LikeResult
-import me.rerere.rainmusic.retrofit.eapi.NeteaseMusicEApi
-import me.rerere.rainmusic.retrofit.weapi.NeteaseMusicWeApi
-import me.rerere.rainmusic.retrofit.weapi.model.HotPlaylistTag
-import me.rerere.rainmusic.retrofit.weapi.model.SubPlaylistResult
+import me.rerere.rainmusic.data.retrofit.api.NeteaseMusicApi
+import me.rerere.rainmusic.data.retrofit.api.model.LikeResult
+import me.rerere.rainmusic.data.retrofit.eapi.NeteaseMusicEApi
+import me.rerere.rainmusic.data.retrofit.weapi.NeteaseMusicWeApi
+import me.rerere.rainmusic.data.retrofit.weapi.model.HotPlaylistTag
+import me.rerere.rainmusic.data.retrofit.weapi.model.SubPlaylistResult
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.encrypt.encryptEApi
 import me.rerere.rainmusic.util.encrypt.encryptWeAPI

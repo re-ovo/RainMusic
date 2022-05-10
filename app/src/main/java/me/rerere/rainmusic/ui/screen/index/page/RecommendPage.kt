@@ -24,8 +24,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
-import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
+import me.rerere.rainmusic.data.retrofit.weapi.model.NewSongs
+import me.rerere.rainmusic.data.retrofit.weapi.model.PersonalizedPlaylist
 import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.local.LocalNavController

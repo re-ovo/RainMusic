@@ -1,15 +1,26 @@
 package me.rerere.rainmusic.util
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.ContextWrapper
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.widget.Toast
+
+/**
+ * 基于Context寻找Activity
+ */
+fun Context.findActivity(): Activity = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> error("Failed to find activity: ${this.javaClass.name}")
+}
 
 /**
  * 创建通知渠道

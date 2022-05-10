@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import me.rerere.rainmusic.retrofit.api.model.UserPlaylists
+import me.rerere.rainmusic.data.retrofit.api.model.UserPlaylists
 import me.rerere.rainmusic.ui.component.shimmerPlaceholder
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.local.LocalUserData

@@ -46,9 +46,6 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-    lintOptions {
-        disable("UnsafeOptInUsageError")
-    }
 }
 
 dependencies {
@@ -56,10 +53,9 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.4.0'
 
     // media3
-    implementation "androidx.media3:media3-session:1.0.0-alpha03"
-    implementation "androidx.media3:media3-common:1.0.0-alpha03"
-    implementation "androidx.media3:media3-exoplayer:1.0.0-alpha03"
-    implementation "androidx.media3:media3-ui:1.0.0-alpha03"
+    implementation "androidx.media3:media3-session:$media3_version"
+    implementation "androidx.media3:media3-common:$media3_version"
+    implementation "androidx.media3:media3-exoplayer:$media3_version"
 
     // splash screen
     implementation "androidx.core:core-splashscreen:1.0.0-beta02"
@@ -72,7 +68,7 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
-    implementation "androidx.compose.material3:material3:1.0.0-alpha10"
+    implementation "androidx.compose.material3:material3:1.0.0-alpha09"
 
     // hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
@@ -97,17 +93,16 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
     implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
     implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
     implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_version"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
     implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
 
     // OkHttp & Retrofit
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.4'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.7'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.7'
 
     // 加密库
     def kryptoVersion = "2.4.8"
@@ -121,4 +116,16 @@ dependencies {
 
 kapt {
     correctErrorTypes true
+}
+
+// 禁用掉烦人的警告
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        freeCompilerArgs += "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
+        freeCompilerArgs += "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
+        freeCompilerArgs += "-opt-in=androidx.compose.animation.ExperimentalAnimationApi"
+        freeCompilerArgs += "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
+        freeCompilerArgs += "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi"
+        freeCompilerArgs += "-opt-in=coil.annotation.ExperimentalCoilApi"
+    }
 }

@@ -2,11 +2,11 @@
 
 buildscript {
     ext {
-        compose_version = '1.2.0-alpha08'
-        hilt_version = '2.41'
-        kotlin_version = '1.6.20'
-        accompanist_version = '0.24.7-alpha'
-        media3_version = "1.0.0-alpha01"
+        compose_version = '1.2.0-alpha07'
+        hilt_version = '2.42'
+        kotlin_version = '1.6.10'
+        accompanist_version = '0.24.6-alpha'
+        media3_version = "1.0.0-alpha03"
         paging_version = "3.1.1"
     }
 
@@ -16,7 +16,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0-alpha08'
+        classpath 'com.android.tools.build:gradle:7.3.0-alpha09'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }

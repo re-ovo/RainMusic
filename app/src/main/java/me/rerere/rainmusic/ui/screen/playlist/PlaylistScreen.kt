@@ -30,7 +30,7 @@ import coil.compose.rememberImagePainter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.rerere.rainmusic.retrofit.api.model.PlaylistDetail
+import me.rerere.rainmusic.data.retrofit.api.model.PlaylistDetail
 import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.PopBackIcon
 import me.rerere.rainmusic.ui.component.RainTopBar
@@ -224,6 +224,7 @@ private fun PlaylistAction(
                                         setArtist(track.ar.joinToString(", ") { ar -> ar.name })
                                         setMediaUri(Uri.parse("$RainMusicProtocol://music?id=${track.id}"))
                                         setArtworkUri(Uri.parse(track.al.picUrl.https))
+
                                     }
                                 }
                             } ?: emptyList()

@@ -6,7 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import me.rerere.rainmusic.model.UserData
+import me.rerere.rainmusic.data.model.UserData
 import me.rerere.rainmusic.ui.local.LocalUserData
 
 /**

@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import me.rerere.rainmusic.model.UserData
+import me.rerere.rainmusic.data.model.UserData
 import me.rerere.rainmusic.repo.UserRepo
 import me.rerere.rainmusic.ui.local.LocalNavController
 import me.rerere.rainmusic.ui.local.LocalUserData
@@ -60,11 +60,6 @@ class RouteActivity : ComponentActivity() {
     var preparingData = true
     var userData by mutableStateOf(UserData.VISITOR)
 
-    @OptIn(
-        ExperimentalAnimationApi::class,
-        androidx.compose.material3.ExperimentalMaterial3Api::class,
-        com.google.accompanist.pager.ExperimentalPagerApi::class
-    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

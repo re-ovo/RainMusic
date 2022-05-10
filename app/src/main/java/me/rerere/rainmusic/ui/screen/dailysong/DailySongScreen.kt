@@ -17,7 +17,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import me.rerere.rainmusic.retrofit.api.model.DailyRecommendSongs
+import me.rerere.rainmusic.data.retrofit.api.model.DailyRecommendSongs
 import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.AppBarStyle
 import me.rerere.rainmusic.ui.component.PopBackIcon

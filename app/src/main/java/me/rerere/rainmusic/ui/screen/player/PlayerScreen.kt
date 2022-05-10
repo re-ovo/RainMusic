@@ -31,8 +31,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.isActive
-import me.rerere.rainmusic.retrofit.api.model.LyricLine
-import me.rerere.rainmusic.retrofit.api.model.parse
+import me.rerere.rainmusic.data.retrofit.api.model.LyricLine
+import me.rerere.rainmusic.data.retrofit.api.model.parse
 import me.rerere.rainmusic.service.MusicService
 import me.rerere.rainmusic.ui.component.PopBackIcon
 import me.rerere.rainmusic.ui.component.RainTopBar

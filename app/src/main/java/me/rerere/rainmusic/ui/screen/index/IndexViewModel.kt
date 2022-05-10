@@ -2,7 +2,6 @@ package me.rerere.rainmusic.ui.screen.index
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
 import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -10,17 +9,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import me.rerere.rainmusic.model.Playlists
+import me.rerere.rainmusic.data.model.Playlists
+import me.rerere.rainmusic.data.retrofit.api.model.HighQualityPlaylist
+import me.rerere.rainmusic.data.retrofit.api.model.Toplists
+import me.rerere.rainmusic.data.retrofit.api.model.UserPlaylists
+import me.rerere.rainmusic.data.retrofit.weapi.model.NewSongs
+import me.rerere.rainmusic.data.retrofit.weapi.model.PersonalizedPlaylist
+import me.rerere.rainmusic.data.retrofit.weapi.model.PlaylistCategory
 import me.rerere.rainmusic.repo.MusicRepo
-import me.rerere.rainmusic.repo.YiYanRepo
 import me.rerere.rainmusic.repo.UserRepo
 import me.rerere.rainmusic.repo.YiYan
-import me.rerere.rainmusic.retrofit.api.model.HighQualityPlaylist
-import me.rerere.rainmusic.retrofit.api.model.Toplists
-import me.rerere.rainmusic.retrofit.api.model.UserPlaylists
-import me.rerere.rainmusic.retrofit.weapi.model.NewSongs
-import me.rerere.rainmusic.retrofit.weapi.model.PersonalizedPlaylist
-import me.rerere.rainmusic.retrofit.weapi.model.PlaylistCategory
+import me.rerere.rainmusic.repo.YiYanRepo
 import me.rerere.rainmusic.util.DataState
 import me.rerere.rainmusic.util.sharedPreferencesOf
 import javax.inject.Inject

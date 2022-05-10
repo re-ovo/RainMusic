@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import me.rerere.rainmusic.data.retrofit.api.model.Lyric
+import me.rerere.rainmusic.data.retrofit.api.model.MusicDetails
+import me.rerere.rainmusic.data.retrofit.weapi.model.LikeList
 import me.rerere.rainmusic.repo.MusicRepo
 import me.rerere.rainmusic.repo.UserRepo
-import me.rerere.rainmusic.retrofit.api.model.Lyric
-import me.rerere.rainmusic.retrofit.api.model.MusicDetails
-import me.rerere.rainmusic.retrofit.weapi.model.LikeList
 import me.rerere.rainmusic.util.DataState
 import javax.inject.Inject
 

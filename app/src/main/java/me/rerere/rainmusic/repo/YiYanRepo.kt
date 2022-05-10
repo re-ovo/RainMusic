@@ -24,7 +24,7 @@ class YiYanRepo @Inject constructor(
                 okHttpClient.newCall(request).execute()
             }
             require(result.isSuccessful)
-            val text = result.body?.string() ?: ""
+            val text = result.body.string() ?: ""
             emit(DataState.Success(Gson().fromJson(text, YiYan::class.java)))
         } catch (e: Exception) {
             e.printStackTrace()
