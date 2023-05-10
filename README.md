@@ -2,6 +2,8 @@
 
 # RainMusic
 
+> ⚠️ 这是一个玩具项目，早起学compose的时候写着玩的，已经放弃继续开发了
+
 [![GitHub issues](https://img.shields.io/github/issues/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/issues)
 [![GitHub forks](https://img.shields.io/github/forks/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/network)
 [![GitHub stars](https://img.shields.io/github/stars/re-ovo/RainMusic)](https://github.com/re-ovo/RainMusic/stargazers)
